@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "..\lib\Either.h"
+using namespace libmonad;
 
 namespace Tests
 {	
@@ -9,9 +10,9 @@ namespace Tests
 
 		auto successfulOperation = []{ return std::string("Value is ABC");};
 
-		libmonad::Either<int, std::string> result = successfulOperation();
+		Either<int, std::string> result = successfulOperation();
 
-		libmonad::Either<int, char> result2 = result.Bind<char>([](const libmonad::Either<int, std::string>&)
+		Either<int, char> result2 = result.Bind<char>([](const Either<int, std::string>&)
 		{
 			return libmonad::Either<int, char>('c'); // transform to Either<int, char>
 		});
@@ -26,12 +27,12 @@ namespace Tests
 
 		auto successfulOperation = []{ return std::string("Value is ABC");};
 
-		libmonad::Either<int, std::string> result = successfulOperation();
+		Either<int, std::string> result = successfulOperation();
 
-		libmonad::Either<int, float> result2 = result.Bind<char>([](const libmonad::Either<int, std::string>&)
+		Either<int, float> result2 = result.Bind<char>([](const Either<int, std::string>&)
 		{
 			return libmonad::Either<int, char>('c'); // transform to Either<int, char>
-		}).Bind<float>([](libmonad::Either<int, char> in)
+		}).Bind<float>([](Either<int, char> in)
 		{
 			return libmonad::Either<int, float>(99.0f); // transform to Either<int, float>
 		});

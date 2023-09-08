@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "..\lib\Either.h"
+using namespace libmonad;
 
 namespace Tests
 {
@@ -10,7 +11,7 @@ namespace Tests
 		auto resultIfLeft = std::to_string(errorCode);
 
 		// assign a left type value
-		libmonad::Either<int, std::string> errorOrMessage = errorCode;
+		Either<int, std::string> errorOrMessage = errorCode;
 
 		// What to return if its actually a string, i.e a right type
 		const std::string result = errorOrMessage.Match(
@@ -33,7 +34,7 @@ namespace Tests
 		constexpr auto errorMessage = "35";
 
 		// assign a right type value
-		libmonad::Either<int, std::string> errorOrMessage = errorMessage;
+		Either<int, std::string> errorOrMessage = errorMessage;
 
 		// What to return if its actually a string, i.e a right type
 		const std::string result = errorOrMessage.Match(
@@ -57,7 +58,7 @@ namespace Tests
 		auto resultIfLeft = std::to_string(errorCode);
 
 		// assign a left type value
-		libmonad::Either<int, std::string> errorOrMessage = errorCode;
+		Either<int, std::string> errorOrMessage = errorCode;
 
 		// What to return if its actually a int, i.e a left type
 		const std::string result = errorOrMessage.IfLeft([=](int code) {return resultIfLeft;}); 
@@ -76,7 +77,7 @@ namespace Tests
 		constexpr auto errorMessage = "35";
 
 		// assign a right type value
-		libmonad::Either<int, std::string> errorOrMessage = errorMessage;
+		Either<int, std::string> errorOrMessage = errorMessage;
 
 		// What to return if its actually a int, i.e a left type
 		const std::string result = errorOrMessage.IfLeft(
