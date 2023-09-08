@@ -30,10 +30,10 @@ namespace libmonad
 		Either();
 
 		template <typename T>
-		Either<L, T> Map(std::function<T(R)> bind);
+		Either<L, T> Map(std::function<T(R)> transform);
 
 		template <typename T>
-		Either<L, T> Bind(std::function<Either<L,T>(R)> map);
+		Either<L, T> Bind(std::function<Either<L,T>(R)> transform);
 
 		/**
 		 * \brief What left value to return 
@@ -97,27 +97,27 @@ namespace libmonad
 
 	template <typename L, typename R>
 	template <typename T>
-	Either<L, T> Either<L, R>::Map(std::function<T(R)> bind)
+	Either<L, T> Either<L, R>::Map(std::function<T(R)> transform)
 	{
 		CheckIfInitialized();
 		if(isLeft)
 		{
-			return this;
+			return left;
 		}
-		auto result = Either<L, T>(bind(right));
+		auto result = Either<L, T>(transform(right));
 		return result;
 	}
 
 	template <typename L, typename R>
 	template <typename T>
-	Either<L, T> Either<L, R>::Bind(std::function<Either<L,T>(R)> map)
+	Either<L, T> Either<L, R>::Bind(std::function<Either<L,T>(R)> transform)
 	{
 		CheckIfInitialized();
 		if(isLeft)
 		{
-			return this;
+			return left;
 		}
-		return map(right);
+		return transform(right);
 	}
 
 	
