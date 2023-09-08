@@ -5,13 +5,14 @@ TEST(EitherTests, MatchWhenRight)
 {
 	constexpr auto errorCode = 35; // left
 	auto resultIfLeft = std::to_string(errorCode);
-	
+
+	// assign a left type value
 	libmonad::Either<int, std::string> errorOrMessage = errorCode;
 
 	// What to return if its actually a string, i.e a right type
 	const std::string result = errorOrMessage.Match(
 		[=](int) {return  resultIfLeft; },
-		[](std::string errorMessage) {return errorMessage;}); 
+		[](std::string errorMessage) {return errorMessage;});
 	
 	EXPECT_EQ(result, resultIfLeft);
 
@@ -27,7 +28,8 @@ TEST(EitherTests, MatchWhenRight)
 TEST(EitherTests, MatchWhenLeft)
 {
 	constexpr auto errorMessage = "35";
-	
+
+	// assign a right type value
 	libmonad::Either<int, std::string> errorOrMessage = errorMessage;
 
 	// What to return if its actually a string, i.e a right type
@@ -50,7 +52,8 @@ TEST(EitherTests, IfLeft)
 {
 	constexpr auto errorCode = 35; // left
 	auto resultIfLeft = std::to_string(errorCode);
-	
+
+	// assign a left type value
 	libmonad::Either<int, std::string> errorOrMessage = errorCode;
 
 	// What to return if its actually a int, i.e a left type
@@ -68,7 +71,8 @@ TEST(EitherTests, IfLeft)
 TEST(EitherTests, IfRight)
 {
 	constexpr auto errorMessage = "35";
-	
+
+	// assign a right type value
 	libmonad::Either<int, std::string> errorOrMessage = errorMessage;
 
 	// What to return if its actually a int, i.e a left type
