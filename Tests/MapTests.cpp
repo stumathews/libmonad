@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "..\lib\Either.h"
+using namespace libmonad;
 
 namespace Tests
 {	
@@ -8,7 +9,7 @@ namespace Tests
 		auto string5 = std::string("5");
 
 		// Assign a left type value 
-		libmonad::Either<int, char> either = 5;
+		Either<int, char> either = 5;
 
 		// Map the right type (if it is a right type) to a string
 		auto result = either.Map<std::string>([=](char c) { return string5; });
@@ -26,7 +27,7 @@ namespace Tests
 		auto string5 = std::string("Five");
 
 		// Assign a left type value 
-		libmonad::Either<int, char> either = '5';
+		Either<int, char> either = '5';
 
 		// Map the right type (if it is a right type) to a string
 		auto result = either.Map<std::string>([=](char c) { return string5; });
@@ -43,7 +44,7 @@ namespace Tests
 		constexpr auto finalTransformation = 0.5f;
 
 		// set as right type value
-		libmonad::Either<std::string, int> either = 5;
+		Either<std::string, int> either = 5;
 
 		auto result = either.Map<int>([](int i) { return 6;}) // transform int to int
 		.Map<char>([](int i) { return '6';}) // transform int to char
@@ -62,7 +63,7 @@ namespace Tests
 		constexpr auto finalTransformation = 0.5f;
 
 		// set as right type value
-		libmonad::Either<std::string, int> either{"Error"};
+		Either<std::string, int> either{"Error"};
 
 		auto result = either.Map<int>([](int i) { return 6;}) // not run
 		.Map<char>([](int i) { return '6';}) // not run
