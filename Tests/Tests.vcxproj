@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BindTests.cpp" />
+    <ClCompile Include="Examples.cpp" />
     <ClCompile Include="MapTests.cpp" />
     <ClCompile Include="MatchTests.cpp" />
     <ClCompile Include="pch.cpp">

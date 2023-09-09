@@ -4,7 +4,6 @@ using namespace libmonad;
 
 namespace Tests
 {
-
 	TEST(EitherTests, MatchWhenRight)
 	{
 		constexpr auto errorCode = 35; // left
