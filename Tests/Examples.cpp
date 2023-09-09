@@ -44,7 +44,7 @@ namespace Tests
 			    break;
 			  case 1:
 			    // it failed this time with an error
-			    result = string("There was an error");
+			    result = string("The muli-factor hyper-optimization index exploded!");
 			    break;
 			  default:
 			    // something weird happened, return an error
@@ -66,8 +66,12 @@ namespace Tests
 			[](const int i){ return std::to_string(i);},  
 			[](string s) {return s;}); // Could also use IfLeft does this return line implicitly
 
-		// If it is a error message, we want that to be a code, and will make that a code of -1
-		const auto code = result.IfRight([](const string&){ return -1; });		
+		// If it is a error message, we want that to be a code, and will make that a code of -1 (and report the error)
+		const auto code = result.IfRight([](const string& error)
+		{
+			cout << "We had an error: " << error << endl;
+			return -1;
+		});		
 
 		// use a code
 		const auto done = downStreamFunction(code);
