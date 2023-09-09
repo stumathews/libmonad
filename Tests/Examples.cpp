@@ -9,15 +9,15 @@ namespace Tests
 	TEST(ExampleTests, Basics)
 	{
 		Either<int, string> result;
-		cout << result.IsBottom() << endl; // true
+		cout << "IsBottom:" << result.IsBottom() << endl; // true
 
 		result = 25;
-		cout << result.IsBottom() << endl; // false
-		cout << result.IsLeft() << endl; // true
+		cout << "IsBottom:" << result.IsBottom() << endl; // false
+		cout << "IsLeft:" << result.IsLeft() << endl; // true
 		result = string("hello");
 
-		cout << result.IsBottom() << endl; // false
-		cout << result.IsRight() << endl; // true
+		cout << "IsBottom:" << result.IsBottom() << endl; // false
+		cout << "IsRight:"<< result.IsRight() << endl; // true
 
 		// Extract a number value from either
 		const int number = result.Match(
