@@ -4,6 +4,8 @@ C++ Library of Monads
 Currently the following monads are supported:
 - Either<L,R>
 
+To use link to libmonad.lib
+
 ## Examples:
 
 ### Either
