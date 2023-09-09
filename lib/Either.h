@@ -2,7 +2,7 @@
 #include <functional>
 
 namespace libmonad
-{
+{	
 	/**
 	 * \brief An Either can contain either Left type or a Right type
 	 * \tparam L Left type 
@@ -16,12 +16,14 @@ namespace libmonad
 		 * \brief Initialize either with left type value
 		 * \param left value
 		 */
+		// ReSharper disable once CppNonExplicitConvertingConstructor
 		Either(L left);
 
 		/**
 		 * \brief Initialize either with right type value
 		 * \param right value
 		 */
+		// ReSharper disable once CppNonExplicitConvertingConstructor
 		Either(R right);
 
 		/**
