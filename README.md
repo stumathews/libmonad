@@ -40,6 +40,15 @@ You can deal with the strings now in the rest of your code, irrespective if the 
 // either way, out code now can deal with strings uniformly even if it was a number
 cout << witherWayAsString << endl;
 ```
+#### Bind
+```cpp
+// Can also use a bind Transform
+Either<int, float> transformed2 = transformed.Bind<float>([](Either<int, string> in)
+{
+  return Either<int, float>(0.0f); // returns new Either with different Right type - float
+});
+```
+
 #### Full example with Match and IfRight
 
 Match allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type.
