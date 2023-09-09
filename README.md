@@ -8,6 +8,8 @@ Currently the following monads are supported:
 
 ### Either
 
+An Either type can contain either one of two types of values.
+
 ```cpp
 // Declare an either - it can contain a left type value of int or a right type value of string
 Either<int, string> either = 25; //  its an int now, a right type value
@@ -31,7 +33,10 @@ But if we couldn't, (because it maybe was a left value of 25, say), we can still
 ```cpp
 // it could have been a number, in which case we can tell it how to represent that number as a right-value (or string type)
 // If either originally contained a string (right type), you get it, or you get new string if it was a left-type (int).
-const auto witherWayAsString = transformed.IfLeft([](const int number) { return string("Could not transform correctly as it was a number:  ") + to_string(number) ;});
+const auto witherWayAsString = transformed.IfLeft([](const int number)
+{
+  return string("Could not transform correctly as it was a number:  ") + to_string(number) ;
+});
 
 ```
 You can deal with the strings now in the rest of your code, irrespective if the result was in fact a string or a number to begin with.
@@ -77,7 +82,7 @@ auto impureFunction = []()
       break;
     case 1:
       // it failed this time with an error
-      result = string("There was an error");
+      result = string("The muli-factor hyper-optimization index exploded!");
       break;
     default:
       // something weird happened, return an error
@@ -99,8 +104,12 @@ const string resultAsString = result.Match(
   [](const int i){ return std::to_string(i);},  
   [](string s) {return s;}); // Could also use IfLeft does this return line implicitly
 
-// If it is a error message, we want that to be a code, and will make that a code of -1
-const auto code = result.IfRight([](const string&){ return -1; });		
+// If it is a error message, we want that to be a code, and will make that a code of -1 (end report the error)
+const auto code = result.IfRight([](const string&)
+{
+  cout << "We had an error: " << error << endl;
+  return -1;
+});		
 
 // use a code
 const auto done = downStreamFunction(code);
