@@ -29,9 +29,21 @@ namespace libmonad
 		 */
 		Either();
 
+		/**
+		 * \brief Transforms a right type value
+		 * \tparam T type to transform to
+		 * \param transform transformation function that transforms either right type from T to L
+		 * \return Either if right type as R
+		 */
 		template <typename T>
 		Either<L, T> Map(std::function<T(R)> transform);
 
+		/**
+		 * \brief Transforms a right type value
+		 * \tparam T type to transform to
+		 * \param transform transformation function that transforms either right type from T to L
+		 * \return Either if right type as R
+		 */
 		template <typename T>
 		Either<L, T> Bind(std::function<Either<L,T>(R)> transform);
 
@@ -65,11 +77,30 @@ namespace libmonad
 		 * \return right value
 		 */
 		R IfLeft(std::function<R(L)> ifLeft);
+
+		/**
+		 * \brief Determine of either contains the left type value
+		 * \return true if either contains left value
+		 */
+		bool IsLeft() const;
+
+		/**
+		 * \brief Determines of the either contains the right type value
+		 * \return true if the either contains a right value 
+		 */
+		bool IsRight() const;
+
+		/**
+		 * \brief Determines of either is initialized or not
+		 * \return true either not initialized - no value assigned to either
+		 */
+		bool IsBottom() const;
+
 	private:
 		L left;
 		R right;
-		bool IsLeft() const;
-		bool isLeft;
+		
+		bool isLeft{};
 		bool isBottom;
 	};
 
@@ -78,7 +109,7 @@ namespace libmonad
 	{
 		isLeft = true;
 		this->left = left;
-		this->isBottom = false;
+		isBottom = false;
 	}
 
 	template <typename L, typename R>
@@ -86,12 +117,13 @@ namespace libmonad
 	{
 		isLeft = false;
 		this->right = right;
-		this->isBottom = false;
+		isBottom = false;		
 	}
 
 	template <typename L, typename R>
 	Either<L, R>::Either()
 	{
+		isLeft = false;
 		isBottom = true;
 	}
 
@@ -118,14 +150,12 @@ namespace libmonad
 			return left;
 		}
 		return transform(right);
-	}
-
-	
+	}	
 
 	template <typename L, typename R>
 	void Either<L, R>::CheckIfInitialized() const
 	{
-		if(isBottom) { throw "Either is not initialized";}
+		if(isBottom) { throw std::exception("Either is not initialized. Assign it a value");}
 	}
 
 	template <typename L, typename R>
@@ -156,11 +186,22 @@ namespace libmonad
 		return isLeft ? left : ifRight(right);
 	}
 
-
 	template <typename L, typename R>
 	bool Either<L, R>::IsLeft() const
 	{
-		return isLeft;
+		return !isBottom && isLeft;
 	}
+
+	template <typename L, typename R>
+	bool Either<L, R>::IsRight() const
+	{
+		return !isBottom && !isLeft;
 	}
+
+	template <typename L, typename R>
+	bool Either<L, R>::IsBottom() const
+	{
+		return isBottom;
+	}
+}
 
