@@ -5,6 +5,37 @@ using namespace std;
 
 namespace Tests
 {
+
+	TEST(ExampleTests, Basics)
+	{
+		Either<int, string> result;
+		cout << result.IsBottom() << endl; // true
+
+		result = 25;
+		cout << result.IsBottom() << endl; // false
+		cout << result.IsLeft() << endl; // true
+		result = string("hello");
+
+		cout << result.IsBottom() << endl; // false
+		cout << result.IsRight() << endl; // true
+
+		// Extract a number value from either
+		const int number = result.Match(
+			[](int i) { return i;}, // return the number if it has one
+			[](string s) { return -1;}); // return a number if it doesn't contain one
+
+		// Extract a string value from either
+		const string str = result.Match(
+			[](int i) { return to_string(i);}, // return a string if it doesn't contain one
+			[](string s) { return s;}); // return string
+
+		cout << "Number is: " << number << " String is: " << str << endl;
+
+		EXPECT_EQ(number, -1);
+		EXPECT_STREQ(str.c_str(), "hello");
+
+	}
+
 	TEST(ExampleTests, SimpleEither)
 	{
 		// Out either can either by a either with a left type value of int or a right type value of string
@@ -55,7 +86,7 @@ namespace Tests
 		};
 
 		// Call the function which could result in either an error message or a return code
-		auto result = impureFunction();
+		Either<int, string> result = impureFunction();
 
 		// our downstream function only deals with error codes,
 		auto downStreamFunction = [](const int number) { return number + 2; };
