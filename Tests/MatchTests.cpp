@@ -89,4 +89,24 @@ namespace Tests
 		
 		EXPECT_EQ(result1, 35);
 	}
+
+	TEST(EitherTests, IsLeftRightBottom)
+	{
+		Either<int, float> either;
+		EXPECT_TRUE(either.IsBottom());
+		EXPECT_FALSE(either.IsRight());
+		EXPECT_FALSE(either.IsLeft());
+
+		either = 25;
+		EXPECT_TRUE(either.IsLeft());
+		EXPECT_FALSE(either.IsRight());
+		EXPECT_FALSE(either.IsBottom());
+
+		either = 0.5f;
+
+		EXPECT_FALSE(either.IsLeft());
+		EXPECT_TRUE(either.IsRight());
+		EXPECT_FALSE(either.IsBottom());
+
+	}
 }
