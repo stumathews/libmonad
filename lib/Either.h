@@ -60,13 +60,12 @@ namespace libmonad
 		 * \param ifRight value to return if either contains right value
 		 * \return left value
 		 */
-		L IfRight(std::function<L(R)> ifRight);
+		L IfRight(std::function<L(R)> ifRight);		
 		
-		void CheckIfInitialized() const;
 		/**
 		 * \brief What right value to return
 		 * \param ifLeft the right value to return if either contains left value
-		 * \param ifRight the right vlaue to return if either contains the right value
+		 * \param ifRight the right value to return if either contains the right value
 		 * \return right value
 		 */
 		R Match(std::function<R(L)> ifLeft, std::function<R(R)> ifRight);
@@ -97,8 +96,9 @@ namespace libmonad
 		bool IsBottom() const;
 
 	private:
-		L left;
-		R right;
+		void CheckIfInitialized() const;
+		L leftValue;
+		R rightValue;
 		
 		bool isLeft{};
 		bool isBottom;
@@ -108,7 +108,7 @@ namespace libmonad
 	Either<L, R>::Either(L left)
 	{
 		isLeft = true;
-		this->left = left;
+		leftValue = left;
 		isBottom = false;
 	}
 
@@ -116,7 +116,7 @@ namespace libmonad
 	Either<L, R>::Either(R right)
 	{
 		isLeft = false;
-		this->right = right;
+		rightValue = right;
 		isBottom = false;		
 	}
 
@@ -134,9 +134,9 @@ namespace libmonad
 		CheckIfInitialized();
 		if(isLeft)
 		{
-			return left;
+			return leftValue;
 		}
-		auto result = Either<L, T>(transform(right));
+		auto result = Either<L, T>(transform(rightValue));
 		return result;
 	}
 
@@ -147,9 +147,9 @@ namespace libmonad
 		CheckIfInitialized();
 		if(isLeft)
 		{
-			return left;
+			return leftValue;
 		}
-		return transform(right);
+		return transform(rightValue);
 	}	
 
 	template <typename L, typename R>
@@ -162,28 +162,28 @@ namespace libmonad
 	R Either<L, R>::Match(std::function<R(L)> ifLeft, std::function<R(R)> ifRight )
 	{
 		CheckIfInitialized();
-		return isLeft ? ifLeft(left) : ifRight(right);
+		return isLeft ? ifLeft(leftValue) : ifRight(rightValue);
 	}
 
 	template <typename L, typename R>
 	L Either<L, R>::Match(std::function<L(L)> ifLeft, std::function<L(R)> ifRight)
 	{
 		CheckIfInitialized();
-		return isLeft ? ifLeft(left) : ifRight(right);
+		return isLeft ? ifLeft(leftValue) : ifRight(rightValue);
 	}
 
 	template <typename L, typename R>
 	R Either<L, R>::IfLeft(std::function<R(L)> ifLeft )
 	{
 		CheckIfInitialized();
-		return isLeft ? ifLeft(left) : right;
+		return isLeft ? ifLeft(leftValue) : rightValue;
 	}
 
 	template <typename L, typename R>
 	L Either<L, R>::IfRight(std::function<L(R)> ifRight)
 	{
 		CheckIfInitialized();
-		return isLeft ? left : ifRight(right);
+		return isLeft ? leftValue : ifRight(rightValue);
 	}
 
 	template <typename L, typename R>
