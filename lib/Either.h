@@ -102,31 +102,23 @@ namespace libmonad
 		L leftValue;
 		R rightValue;
 		
-		bool isLeft{};
+		bool isLeft;
 		bool isBottom;
 	};
 
 	template <typename L, typename R>
-	Either<L, R>::Either(L left)
+	Either<L, R>::Either(L left): leftValue(left), isLeft(true), isBottom(false)
 	{
-		isLeft = true;
-		leftValue = left;
-		isBottom = false;
 	}
 
 	template <typename L, typename R>
-	Either<L, R>::Either(R right)
-	{
-		isLeft = false;
-		rightValue = right;
-		isBottom = false;		
+	Either<L, R>::Either(R right) : rightValue(right), isLeft(false), isBottom(false)
+	{	
 	}
 
 	template <typename L, typename R>
-	Either<L, R>::Either()
+	Either<L, R>::Either() : isLeft(false), isBottom(true)
 	{
-		isLeft = false;
-		isBottom = true;
 	}
 
 	template <typename L, typename R>
