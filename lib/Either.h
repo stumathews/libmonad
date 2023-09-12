@@ -62,7 +62,7 @@ namespace libmonad
 		 * \param  ifLeft action to perform if Left
 		 * \param  ifRight action to perform if Right
 		 */
-		/void MatchVoid(std::function<void(L)> ifLeft, std::function<void(R)> ifRight);
+		void MatchVoid(std::function<void(L)> ifLeft, std::function<void(R)> ifRight);
 
 		/**
 		 * \brief what left value to return if either contains right value
