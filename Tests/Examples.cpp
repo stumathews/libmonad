@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "..\lib\Either.h"
+#include "..\lib\Option.h"
 using namespace libmonad;
 using namespace std;
 
@@ -108,6 +109,78 @@ namespace Tests
 		const auto done = downStreamFunction(code);
 
 		cout << "result of downstream function was " << done  << " because code was " << code << " because result result was " << resultAsString << endl;
+
+	}
+
+	TEST(ExampleTests, Options)
+	{
+		// Declare and option of integer
+		Option<int> result = 56;	
+
+		auto yourMapFunction = [](int i) { };
+		auto yourBindFunction = [](const int i) { return Option<int>(i);};
+
+		// Transformation time:
+		Option<string> final = result
+			.Map<int>([](const int i)
+			{
+				return i * 12; // 672
+			})
+			.Map<int>([=](const int i)
+			{
+				yourMapFunction(i);
+				return i;
+			})
+			.Bind<int>([=](int i)
+			{
+				return yourBindFunction(i);
+			})
+			.Map<string>([](const int i)
+			{
+				return to_string(i);
+			});
+
+		const string expected = final.Match(
+			[]{ return string("failed"); }, // ifNone:
+			[](string s){ return s;}); // ifSome:
+
+		EXPECT_EQ(expected, "672");
+
+	}
+
+	TEST(ExampleTests, ShortCircuit)
+	{
+		// Declare and option of integer
+		Option<int> result = 56;	
+
+		auto yourMapFunction = [](int i) { };
+		auto yourBindFunction = [](const int i) { return Option<int>(i);};
+
+		// Transformation time:
+		Option<string> final = result
+			.Map<int>([](const int i)
+			{
+				return i * 12; // 672
+			})
+			.Map<int>([=](const int i)
+			{
+				yourMapFunction(i);
+				return i;
+			})
+			.Bind<int>([=](int i)
+			{
+				return yourBindFunction(i);
+			})
+			.Map<string>([](const int i)
+			{
+				return to_string(i);
+			});
+
+		const string expected = final.Match(
+			[]{ return string("failed"); }, // ifNone:
+			[](string s){ return s;}); // ifSome:
+
+		EXPECT_EQ(expected, "672");
 
 	}
 }

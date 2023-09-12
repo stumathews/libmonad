@@ -58,6 +58,13 @@ namespace libmonad
 		L Match(std::function<L(L)> ifLeft, std::function<L(R)> ifRight);
 
 		/**
+		 * \brief perform action depending on the type value
+		 * \param  ifLeft action to perform if Left
+		 * \param  ifRight action to perform if Right
+		 */
+		/void MatchVoid(std::function<void(L)> ifLeft, std::function<void(R)> ifRight);
+
+		/**
 		 * \brief what left value to return if either contains right value
 		 * \param ifRight value to return if either contains right value
 		 * \return left value
@@ -96,7 +103,7 @@ namespace libmonad
 		 * \return true either not initialized - no value assigned to either
 		 */
 		bool IsBottom() const;
-
+		
 	private:
 		void CheckIfInitialized() const;
 		L leftValue;
@@ -164,6 +171,14 @@ namespace libmonad
 	{
 		CheckIfInitialized();
 		return isLeft ? ifLeft(leftValue) : ifRight(rightValue);
+	}
+		
+
+	template <typename L, typename R>
+	void Either<L, R>::MatchVoid(std::function<void(L)> ifLeft, std::function<void(R)> ifRight)
+	{
+		CheckIfInitialized();
+		isLeft ? ifLeft(leftValue) : ifRight(rightValue);
 	}
 
 	template <typename L, typename R>

@@ -6,6 +6,7 @@ using namespace std;
 
 namespace Tests
 {	
+	
 	TEST(OptionTests, Basics)
 	{
 		Option<int> maybeNumber;
@@ -19,20 +20,20 @@ namespace Tests
 		EXPECT_FALSE(maybeNumber.IsNone());
 
 		// map it
-		auto result = maybeNumber.Map<float>([](int i)
+		auto result = maybeNumber.Map<string>([](int i)
 		{
-			return 26.75f;
+			return "26.75f";
 		});
 
 		EXPECT_TRUE(maybeNumber.IsSome());
 		EXPECT_FALSE(maybeNumber.IsNone());
 
 		// extract value
-		auto floatValue = result.Match<float>(
-			[]() { return 0.0f;},
-			[](const float f) {return f;});
+		auto floatValue = result.Match(
+			[]() { return "0.0f";},
+			[](const string& s) {return s;});
 
-		EXPECT_EQ(floatValue, 26.75f);
+		EXPECT_EQ(floatValue, "26.75f");
 
 		// nothing
 		result = None();
@@ -41,15 +42,15 @@ namespace Tests
 		EXPECT_TRUE(result.IsNone());
 
 		// map nothing
-		floatValue = result.Match<float>(
-			[]() { return 0.0f;},
-			[](float f) {return f;});
+		floatValue = result.Match(
+			[]() { return "0.0f";},
+			[](string s) {return s;});
 
 		EXPECT_FALSE(result.IsSome());
 		EXPECT_TRUE(result.IsNone());
 
 		// extract value
-		EXPECT_EQ(floatValue, 0.0f);
+		EXPECT_EQ(floatValue, "0.0f");
 	}
 
 	TEST(OptionTests, BindBasics)
@@ -61,7 +62,7 @@ namespace Tests
 			return Option<string>(string("true"));
 		});
 
-		auto result = a.Match<string>(
+		auto result = a.Match(
 			[]() { return string("failed"); },
 			[](string s){ return s;});
 
@@ -76,7 +77,7 @@ namespace Tests
 			return Option<string>(string("true"));
 		});
 
-		result = a.Match<string>(
+		result = a.Match(
 			[]() { return string("failed"); },
 			[](string s){ return s;});
 
