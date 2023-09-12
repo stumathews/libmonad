@@ -128,7 +128,7 @@ const auto done = downStreamFunction(code);
 
 cout << "result of downstream function was " << done  << " because code was " << code << " because result result was " << resultAsString << endl;
 ```
-### Option
+### Option<T>
 
 ```cpp
 // Declare and option of integer
