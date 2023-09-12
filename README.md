@@ -3,6 +3,7 @@ C++ Library of Monads
 
 Currently the following monads are supported:
 - Either<L,R>
+- Option<T>
 
 To use link to libmonad.lib
 
@@ -126,4 +127,39 @@ const auto code = result.IfRight([](const string&)
 const auto done = downStreamFunction(code);
 
 cout << "result of downstream function was " << done  << " because code was " << code << " because result result was " << resultAsString << endl;
+```
+### Option
+
+```cpp
+// Declare and option of integer
+Option<int> result = 56;	
+
+auto yourMapFunction = [](int i) { };
+auto yourBindFunction = [](const int i) { return Option<int>(i);};
+
+// Transformation time:
+Option<string> final = result
+  .Map<int>([](const int i)
+  {
+    return i * 12; // 672
+  })
+  .Map<int>([=](const int i)
+  {
+    yourMapFunction(i);
+    return i;
+  })
+  .Bind<int>([=](int i)
+  {
+    return yourBindFunction(i);
+  })
+  .Map<string>([](const int i)
+  {
+    return to_string(i);
+  });
+
+const string expected = final.Match(
+  []{ return string("failed"); }, // ifNone:
+  [](string s){ return s;}); // ifSome:
+
+EXPECT_EQ(expected, "672");
 ```
