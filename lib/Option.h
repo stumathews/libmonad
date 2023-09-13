@@ -39,28 +39,23 @@ namespace libmonad
 			}
 
 			template <typename T2>
-			Option<T2> Map(std::function<T2(T)> transform)
+			Option<T2> Map(std::function<Option<T2>(T)> transform)
 			{
-				std::function<T2(T)> fn = [=](T t) -> T2 { return transform(t);};
-				Either<None, T2> either = value.Map(fn);
+				std::function<Option<T2>(T)> fn = [=](T t) -> Option<T2> { return transform(t); };
+				Either<None, Option<T2>> either = value.Map(fn);
+
+				Option<T2> option = either.Match([](None n){ return n;}, [](Option<T2> t2){ return t2;});
 				
-				return ToOption(either);
+				return option;
 			}
 				
 			template <typename T2>
-			Option<T2> Bind(std::function<Option<T2>(T)> transform)
+			Option<T2> Bind(std::function<Either<None,Option<T2>>(T)> transform)
 			{
 				Option<T2> option = None();
-
-				value.MatchVoid( [&](None n)
-				{
-					option = None();
-				}, [&](T t)
-				{
-					option = transform(t);
-				});
-								
-				return option;
+				std::function<Either<None,Option<T2>>(T)> fn = [=](T t) { return transform(t); };
+				Either<None, Option<T2>> either = value.Bind(fn);
+				return either.Match([](None n){ return n;}, [](Option<T2> t2){ return t2;});				
 			}
 			
 			T Match(std::function<T()> ifNone, std::function<T(T)> ifSome )
