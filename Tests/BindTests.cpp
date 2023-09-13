@@ -40,4 +40,14 @@ namespace Tests
 		const auto result3 = result2.IfLeft([](int i) { return '0';});
 		EXPECT_EQ(result3, 99.0f);
 	}
+
+	TEST(EitherTests, ShortCurcuit)
+	{
+		Either<int, std::string> code = 44;
+		const auto result = code.Map<std::string>([](std::string s){ return std::string("55");});
+		code.Map<std::string>([](std::string s){ return 22;});
+		code.Map<std::string>([](std::string s){ return std::string("fish");});
+
+		EXPECT_TRUE(result.IsLeft());
+	}
 }
