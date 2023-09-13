@@ -128,6 +128,18 @@ const auto done = downStreamFunction(code);
 
 cout << "result of downstream function was " << done  << " because code was " << code << " because result result was " << resultAsString << endl;
 ```
+
+#### Short circuiting
+```cpp
+Either<int, std::string> code = 44;
+
+const Either<int, std::string> result = code.Map<std::string>([](std::string s){ return std::string("55");});
+code.Map<std::string>([](std::string s){ return 22;}); // short circuits because we have a left value now
+code.Map<std::string>([](std::string s){ return std::string("fish");});
+
+EXPECT_TRUE(result.IsLeft());
+```
+
 ### Option<T>
 
 ```cpp
@@ -162,4 +174,27 @@ const string expected = final.Match(
   [](string s){ return s;}); // ifSome:
 
 EXPECT_EQ(expected, "672");
+```
+
+#### Short circuiting
+```cpp
+Option<int> option = 25;
+
+const auto result = option
+                    .Map<int>([](const int i){ return i * 25;})
+                    .Map<string>([](const int i) { return to_string(i);})
+                    .Map<string>([](const string& s){ return None();}) // short circuit
+                    .Map<string>([](const string& s){ return string("failed");});
+
+EXPECT_TRUE(result.IsNone());
+EXPECT_FALSE(result.IsSome());
+
+Option<int> option1 = 25;
+const auto result2 = option1
+                     .Bind<string>([](int i) { return Option<string>("Hello");})
+                     .Bind<int>([](string s){ return None();})
+           .Map<float>([](float f){ return 0.0f;}); // wont be run
+
+EXPECT_TRUE(result2.IsNone());
+EXPECT_FALSE(result2.IsSome());
 ```
