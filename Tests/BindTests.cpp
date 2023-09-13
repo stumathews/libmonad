@@ -45,9 +45,9 @@ namespace Tests
 	{
 		Either<int, std::string> code = 44;
 
-		const Either<int, std::string> result = code.Map<std::string>([](std::string s){ return std::string("55");});
-		code.Map<std::string>([](std::string s){ return 22;}); // short circuits because we have a left value now
-		code.Map<std::string>([](std::string s){ return std::string("fish");});
+		const Either<int, std::string> result = code.Map<std::string>([](std::string s){ return std::string("55");})
+		.Map<std::string>([](std::string s){ return 22;}) // short circuits because we have a left value now
+		.Map<std::string>([](std::string s){ return std::string("fish");});
 
 		EXPECT_TRUE(result.IsLeft());
 	}
