@@ -49,7 +49,9 @@ namespace libmonad
 			
 			T Match(std::function<T()> ifNone, std::function<T(T)> ifSome )
 			{
-				return value.Match([=](None n){return ifNone();}, [=](T t){return ifSome(t);});
+				return value.Match(
+					[=](None n){return ifNone();},
+					[=](T t){return ifSome(t);});
 			}
 
 			void MatchVoid(const std::function<void(None)>& ifNone, std::function<void(T)> ifSome )
@@ -63,7 +65,7 @@ namespace libmonad
 			Option<T2> ToOption(Either<None, T2> either)
 			{
 				Option<T2> option = None();
-
+				
 				either.MatchVoid(
 					[&](None n){ option = None(); }, 
 					[&](T2 t2){ option = t2;});
