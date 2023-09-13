@@ -29,7 +29,7 @@ namespace libmonad
 		/**
 		 * \brief Initialize either with no value
 		 */
-		Either();
+		Either();	
 
 		/**
 		 * \brief Transforms a right type value
@@ -37,8 +37,8 @@ namespace libmonad
 		 * \param transform transformation function that transforms either right type from T to L
 		 * \return Either if right type as R
 		 */
-		template <typename T>
-		Either<L, T> Map(std::function<T(R)> transform);
+		template <class T>
+		Either<L, T> Map(std::function<Either<L, T>(R)> transform);
 
 		/**
 		 * \brief Transforms a right type value
@@ -130,7 +130,7 @@ namespace libmonad
 
 	template <typename L, typename R>
 	template <typename T>
-	Either<L, T> Either<L, R>::Map(std::function<T(R)> transform)
+	Either<L, T> Either<L, R>::Map(std::function<Either<L,T>(R)> transform)
 	{
 		CheckIfInitialized();
 		if(isLeft)
