@@ -44,14 +44,14 @@ namespace Tests
 		either = string("something wonderful"); // its a string now, a left type value (can comment this line out to see how the rest of the code deals with it)
 
 		// Transform the contents to another form. rule: we only map the right type value if the either contains it...
-		auto transformed = either.Map<string>([](const string& in)
+		Either<int, string> transformed = either.Map<string>([](const string& in)
 		{
 			// We map/transform the right type, i.e string to another right type, i.e a nother string
 			return string("Got this: '") + in + string("', but this is even better!");
 		});
 
 		// it could have been a number, in which case we can tell it how to represent that number as a right-value (or string type)
-		const auto witherWay = transformed.IfLeft([](const int number) { return string("Could not transform correctly as it was a number:  ") + to_string(number) ;});
+		const string witherWay = transformed.IfLeft([](const int number) { return string("Could not transform correctly as it was a number:  ") + to_string(number) ;});
 
 		// either way, out code now can deal with strings uniformly even if it was a number
 		cout << witherWay << endl;
@@ -62,7 +62,7 @@ namespace Tests
 		srand(time(nullptr));
 
 		// This is a function that has variable outcomes
-		auto impureFunction = []()
+		auto impureFunction = []() -> Either<int, string>
 		{
 			// result can either be a error message or a return code
 			Either<int, string> result;
@@ -99,14 +99,14 @@ namespace Tests
 			[](string s) {return s;}); // Could also use IfLeft does this return line implicitly
 
 		// If it is a error message, we want that to be a code, and will make that a code of -1 (and report the error)
-		const auto code = result.IfRight([](const string& error)
+		const int code = result.IfRight([](const string& error)
 		{
 			cout << "We had an error: " << error << endl;
 			return -1;
 		});		
 
 		// use a code
-		const auto done = downStreamFunction(code);
+		const int done = downStreamFunction(code);
 
 		cout << "result of downstream function was " << done  << " because code was " << code << " because result result was " << resultAsString << endl;
 
