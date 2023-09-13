@@ -114,31 +114,21 @@ namespace libmonad
 	};
 
 	template <typename L, typename R>
-	Either<L, R>::Either(L left): leftValue(left), isLeft(true), isBottom(false)
-	{
-	}
+	Either<L, R>::Either(L left): leftValue(left), isLeft(true), isBottom(false) {}
 
 	template <typename L, typename R>
-	Either<L, R>::Either(R right) : rightValue(right), isLeft(false), isBottom(false)
-	{	
-	}
+	Either<L, R>::Either(R right) : rightValue(right), isLeft(false), isBottom(false) {}
 
 	template <typename L, typename R>
-	Either<L, R>::Either() : isLeft(false), isBottom(true)
-	{
-	}
+	Either<L, R>::Either() : isLeft(false), isBottom(true) {}
 
 	template <typename L, typename R>
 	template <typename T>
 	Either<L, T> Either<L, R>::Map(std::function<Either<L,T>(R)> transform)
 	{
 		CheckIfInitialized();
-		if(isLeft)
-		{
-			return leftValue;
-		}
-		auto result = Either<L, T>(transform(rightValue));
-		return result;
+		if(isLeft) { return leftValue; }
+		return Either<L, T>(transform(rightValue));;
 	}
 
 	template <typename L, typename R>
@@ -146,10 +136,7 @@ namespace libmonad
 	Either<L, T> Either<L, R>::Bind(std::function<Either<L,T>(R)> transform)
 	{
 		CheckIfInitialized();
-		if(isLeft)
-		{
-			return leftValue;
-		}
+		if(isLeft) { return leftValue; }
 		return transform(rightValue);
 	}	
 
@@ -171,8 +158,7 @@ namespace libmonad
 	{
 		CheckIfInitialized();
 		return isLeft ? ifLeft(leftValue) : ifRight(rightValue);
-	}
-		
+	}	
 
 	template <typename L, typename R>
 	void Either<L, R>::MatchVoid(std::function<void(L)> ifLeft, std::function<void(R)> ifRight)
@@ -196,21 +182,12 @@ namespace libmonad
 	}
 
 	template <typename L, typename R>
-	bool Either<L, R>::IsLeft() const
-	{
-		return !isBottom && isLeft;
-	}
+	bool Either<L, R>::IsLeft() const { return !isBottom && isLeft; }
 
 	template <typename L, typename R>
-	bool Either<L, R>::IsRight() const
-	{
-		return !isBottom && !isLeft;
-	}
+	bool Either<L, R>::IsRight() const { return !isBottom && !isLeft; }
 
 	template <typename L, typename R>
-	bool Either<L, R>::IsBottom() const
-	{
-		return isBottom;
-	}
+	bool Either<L, R>::IsBottom() const { return isBottom; }
 }
 
