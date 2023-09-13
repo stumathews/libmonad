@@ -96,7 +96,7 @@ namespace Tests
 		const auto result = option
 		                    .Map<int>([](const int i){ return i * 25;})
 		                    .Map<string>([](const int i) { return to_string(i);})
-		                    .Map<string>([](const string& s){ return None();})
+		                    .Map<string>([](const string& s){ return None();}) // short circuit
 		                    .Map<string>([](const string& s){ return string("failed");});
 
 		EXPECT_TRUE(result.IsNone());
@@ -105,7 +105,8 @@ namespace Tests
 		Option<int> option1 = 25;
 		const auto result2 = option1
 		                     .Bind<string>([](int i) { return Option<string>("Hello");})
-		                     .Bind<int>([](string s){ return None();});
+		                     .Bind<int>([](string s){ return None();})
+							 .Map<float>([](float f){ return 0.0f;}); // wont be run
 
 		EXPECT_TRUE(result2.IsNone());
 		EXPECT_FALSE(result2.IsSome());
