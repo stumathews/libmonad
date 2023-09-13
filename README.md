@@ -25,7 +25,7 @@ We can transform the right value to another right value
 
 ```cpp
 // Transform the contents to another form. rule: we only map the right type value if the either contains it...
-auto transformed = either.Map<string>([](const string& in)
+Either<int, string> = either.Map<string>([](const string& in)
 {
   // We map/transform the right type, i.e string to another right type, i.e another string
   return string("Got this: '") + in + string("', but this is even better!");
@@ -40,7 +40,7 @@ Why? Because we dont expect numbers in our results, but we can get them when err
 // the result could have been a number, in which case we can tell it how to represent that number as a right-value (or string type)
 // If either did actually contain a transformed string (right type), you get it back, or you get to create a new string if it was a left-type (int).
 // Eitherway you can still end up with a string
-const auto witherWayAsString = transformed.IfLeft([](const int number)
+const string witherWayAsString = transformed.IfLeft([](const int number)
 {
   return string("Could not transform correctly as it was a number:  ") + to_string(number) ;
 });
@@ -80,7 +80,7 @@ Eg:
 srand(time(nullptr));
 
 // This is a function that has variable outcomes
-auto impureFunction = []()
+auto impureFunction = []() -> Either<int, string>
 {
   // result can either be a error message or a return code
   Either<int, string> result;
@@ -105,7 +105,7 @@ auto impureFunction = []()
 };
 
 // Call the function which could result in either an error message or a return code
-auto result = impureFunction();
+Either<int, string> result = impureFunction();
 
 // Now our downstream function only deals with error codes,
 auto downStreamFunction = [](const int number) { return number + 2; };
@@ -117,14 +117,14 @@ const string resultAsString = result.Match(
   [](string s) {return s;}); // Could also use IfLeft does this return line implicitly
 
 // If it is a error message, we want that to be a code, and will make that a code of -1 (end report the error)
-const auto code = result.IfRight([](const string&)
+const int code = result.IfRight([](const string&)
 {
   cout << "We had an error: " << error << endl;
   return -1;
 });		
 
 // use a code - will be either the code or -1 if we had and error and we got a string above
-const auto done = downStreamFunction(code);
+const int done = downStreamFunction(code);
 
 cout << "result of downstream function was " << done  << " because code was " << code << " because result result was " << resultAsString << endl;
 ```
