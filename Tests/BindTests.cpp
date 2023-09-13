@@ -44,8 +44,9 @@ namespace Tests
 	TEST(EitherTests, ShortCurcuit)
 	{
 		Either<int, std::string> code = 44;
-		const auto result = code.Map<std::string>([](std::string s){ return std::string("55");});
-		code.Map<std::string>([](std::string s){ return 22;});
+
+		const Either<int, std::string> result = code.Map<std::string>([](std::string s){ return std::string("55");});
+		code.Map<std::string>([](std::string s){ return 22;}); // short circuits because we have a left value now
 		code.Map<std::string>([](std::string s){ return std::string("fish");});
 
 		EXPECT_TRUE(result.IsLeft());
