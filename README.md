@@ -24,7 +24,8 @@ We can transform the right value to another right value
 #### Map
 
 ```cpp
-// Transform the contents to another form. rule: we only map the right type value if the either contains it...
+// Transform the contents to another form.
+// rule: we only map the right type value if the either contains it...
 Either<int, string> = either.Map<string>([](const string& in)
 {
   // We map/transform the right type, i.e string to another right type, i.e another string
@@ -37,8 +38,10 @@ Why? Because we dont expect numbers in our results, but we can get them when err
 
 #### IfLeft 
 ```cpp
-// the result could have been a number, in which case we can tell it how to represent that number as a right-value (or string type)
-// If either did actually contain a transformed string (right type), you get it back, or you get to create a new string if it was a left-type (int).
+// the result could have been a number, in which case we can tell it how to
+// represent that number as a right-value (or string type)
+// If either did actually contain a transformed string (right type),
+// you get it back, or you get to create a new string if it was a left-type (int).
 // Eitherway you can still end up with a string
 const string witherWayAsString = transformed.IfLeft([](const int number)
 {
@@ -49,7 +52,8 @@ const string witherWayAsString = transformed.IfLeft([](const int number)
 You can deal with the strings now in the rest of your code, irrespective if the result was in fact a string or a number to begin with.
 
 ```cpp
-// either way, out code now can deal with strings uniformly even if it was a number
+// either way, out code now can deal with strings uniformly even if
+// it was a number
 cout << UseMyString(witherWayAsString) << endl;
 ```
 #### Bind
@@ -104,7 +108,8 @@ auto impureFunction = []() -> Either<int, string>
   return result;
 };
 
-// Call the function which could result in either an error message or a return code
+// Call the function which could result in
+// either an error message or a return code
 Either<int, string> result = impureFunction();
 
 // Now our downstream function only deals with error codes,
@@ -116,24 +121,30 @@ const string resultAsString = result.Match(
   [](const int i){ return std::to_string(i);},  
   [](string s) {return s;}); // Could also use IfLeft does this return line implicitly
 
-// If it is a error message, we want that to be a code, and will make that a code of -1 (end report the error)
+// If it is a error message, we want that to be a code,
+// and will make that a code of -1 (end report the error)
 const int code = result.IfRight([](const string&)
 {
   cout << "We had an error: " << error << endl;
   return -1;
 });		
 
-// use a code - will be either the code or -1 if we had and error and we got a string above
+// use a code - will be either the code
+// or -1 if we had and error and we got a string above
 const int done = downStreamFunction(code);
 
-cout << "result of downstream function was " << done  << " because code was " << code << " because result result was " << resultAsString << endl;
+cout << "result of downstream function was "
+<< done
+<< " because code was " << code
+<< " because result result was " << resultAsString << endl;
 ```
 
 #### Short circuiting
 ```cpp
 Either<int, std::string> code = 44;
 
-const Either<int, std::string> result = code.Map<std::string>([](std::string s){ return std::string("55");});
+const Either<int, std::string> result =
+code.Map<std::string>([](std::string s){ return std::string("55");});
 code.Map<std::string>([](std::string s){ return 22;}); // short circuits because we have a left value now
 code.Map<std::string>([](std::string s){ return std::string("fish");});
 
