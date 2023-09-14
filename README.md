@@ -36,26 +36,6 @@ But if we couldn't, (because due to an error we got a left value of 25, say), we
 
 Why? Because we dont expect numbers in our results, but we can get them when errors occur, so we can cater from them and still continue to only care about strings
 
-#### IfLeft 
-```cpp
-// the result could have been a number, in which case we can tell it how to
-// represent that number as a right-value (or string type)
-// If either did actually contain a transformed string (right type),
-// you get it back, or you get to create a new string if it was a left-type (int).
-// Eitherway you can still end up with a string
-const string witherWayAsString = transformed.IfLeft([](const int number)
-{
-  return string("Could not transform correctly as it was a number:  ") + to_string(number) ;
-});
-
-```
-You can deal with the strings now in the rest of your code, irrespective if the result was in fact a string or a number to begin with.
-
-```cpp
-// either way, out code now can deal with strings uniformly even if
-// it was a number
-cout << UseMyString(witherWayAsString) << endl;
-```
 #### Bind
 ```cpp
 // Can also use a bind Transform
