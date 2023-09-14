@@ -32,9 +32,6 @@ Either<int, string> = either.Map<string>([](const string& in)
   return string("Got this: '") + in + string("', but this is even better!");
 });
 ```
-But if we couldn't, (because due to an error we got a left value of 25, say), we can still interpret it as a string, and continue our work. 
-
-Why? Because we dont expect numbers in our results, but we can get them when errors occur, so we can cater from them and still continue to only care about strings
 
 #### Bind
 ```cpp
