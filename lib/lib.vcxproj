@@ -24,6 +24,7 @@
     <ProjectGuid>{a63d4542-48ca-4d12-acae-f35a729c40d0}</ProjectGuid>
     <RootNamespace>lib</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>libmonad</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
