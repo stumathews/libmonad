@@ -61,7 +61,7 @@ either.Match([](int leftValue)
 
 #### MatchTo and IfRight
 
-Match allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type. You chose.
+MatchTo allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type. You chose.
 
 The programmer defines what the transformation function that will do, depending on the version of the Match overload called, eg:
 
