@@ -1,11 +1,9 @@
 # libmonad
-C++ Library of Monads
+C++ header-only library of Monads
 
 Currently the following monads are supported:
 - Either<L,R>
 - Option<T>
-
-To use link to libmonad.lib
 
 ## Examples:
 
