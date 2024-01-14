@@ -59,80 +59,6 @@ either.Match([](int leftValue)
 
 ```
 
-#### MatchTo and IfRight
-
-MatchTo allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type. You chose.
-
-The programmer defines what the transformation function that will do, depending on the version of the Match overload called, eg:
-
-1. MatchTo (L, R) -> R // this will allow you to always get a right value out of the either (you need to convert a left value to a right value)
-
-You can also use IfLeft() which is simpler but does not allow you to modify the right value into something  
-
-2. MatchTo( L, R) -> L // this will allow you to always get a left value out of the either (you need to convert a right value to a left value)
-
-   You can also use IfRight() which is simpler but does not allow you to modify the left value into something
-
-Eg:
-```cpp
-srand(time(nullptr));
-
-// This is a function that has variable outcomes
-auto impureFunction = []() -> Either<int, string>
-{
-  // result can either be a error message or a return code
-  Either<int, string> result;
-
-  // What will it be...
-  switch(rand() % 2)
-  {
-    case 0:
-      // all good, no errors
-      result = 100;
-      break;
-    case 1:
-      // it failed this time with an error
-      result = string("The muli-factor hyper-optimization index exploded!");
-      break;
-    default:
-      // something weird happened, return an error
-      result = string("Unexpected result");
-    }
-
-  return result;
-};
-
-// Call the function which could result in
-// either an error message or a return code
-Either<int, string> result = impureFunction();
-
-// Now our downstream function only deals with error codes,
-auto downStreamFunction = [](const int number) { return number + 2; };
-
-// either way, lets see what actually the result is before interpreting it as a code
-// Match can transform the result as right type (there is also an overload to turn it into a left type)
-const string resultAsString = result.MatchTo(
-  [](const int i){ return std::to_string(i);},  
-  [](string s) {return s;}); // Could also use IfLeft does this return line implicitly
-
-// If it is a error message, we want that to be a code,
-// and will make that a code of -1 (end report the error)
-const int code = result.IfRight([](const string&)
-{
-  cout << "We had an error: " << error << endl;
-  return -1;
-});		
-
-// use a code - will be either the code
-// or -1 if we had and error and we got a string above
-const int done = downStreamFunction(code);
-
-cout << "result of downstream function was "
-<< done
-<< " because code was " << code
-<< " because result result was " << resultAsString << endl;
-```
-
 #### Short circuiting
 ```cpp
 Either<int, std::string> code = 44;
@@ -223,4 +149,77 @@ EXPECT_TRUE(result2.IsNone());
 EXPECT_FALSE(result2.IsSome());
 ```
 
+### MatchTo() and IfRight()
+
+For Either<Left,Right>, MatchTo() allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type. You chose.
+
+The programmer defines what the transformation function that will do, depending on the version of the Match overload called, eg:
+
+1. MatchTo (L, R) -> R // this will allow you to always get a right value out of the either (you need to convert a left value to a right value)
+
+You can also use IfLeft() which is simpler but does not allow you to modify the right value into something  
+
+2. MatchTo( L, R) -> L // this will allow you to always get a left value out of the either (you need to convert a right value to a left value)
+
+   You can also use IfRight() which is simpler but does not allow you to modify the left value into something
+
+Eg:
+```cpp
+srand(time(nullptr));
+
+// This is a function that has variable outcomes
+auto impureFunction = []() -> Either<int, string>
+{
+  // result can either be a error message or a return code
+  Either<int, string> result;
+
+  // What will it be...
+  switch(rand() % 2)
+  {
+    case 0:
+      // all good, no errors
+      result = 100;
+      break;
+    case 1:
+      // it failed this time with an error
+      result = string("The muli-factor hyper-optimization index exploded!");
+      break;
+    default:
+      // something weird happened, return an error
+      result = string("Unexpected result");
+    }
+
+  return result;
+};
+
+// Call the function which could result in
+// either an error message or a return code
+Either<int, string> result = impureFunction();
+
+// Now our downstream function only deals with error codes,
+auto downStreamFunction = [](const int number) { return number + 2; };
+
+// either way, lets see what actually the result is before interpreting it as a code
+// Match can transform the result as right type (there is also an overload to turn it into a left type)
+const string resultAsString = result.MatchTo(
+  [](const int i){ return std::to_string(i);},  
+  [](string s) {return s;}); // Could also use IfLeft does this return line implicitly
+
+// If it is a error message, we want that to be a code,
+// and will make that a code of -1 (end report the error)
+const int code = result.IfRight([](const string&)
+{
+  cout << "We had an error: " << error << endl;
+  return -1;
+});		
+
+// use a code - will be either the code
+// or -1 if we had and error and we got a string above
+const int done = downStreamFunction(code);
+
+cout << "result of downstream function was "
+<< done
+<< " because code was " << code
+<< " because result result was " << resultAsString << endl;
+```
 
