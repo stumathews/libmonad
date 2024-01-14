@@ -85,6 +85,10 @@ namespace libmonad
 			
 		};
 
-		
+		template <typename T>
+		static Option<T> ToOption(T thing)
+		{
+			return Option<T>(thing);
+		}		
 		
 }
