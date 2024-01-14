@@ -4,6 +4,22 @@ using namespace libmonad;
 
 namespace Tests
 {
+
+	TEST(EitherTests, Match)
+	{
+		Either<int, const char*> either = "A phrase";
+
+		// To extract the value or determine what it is, you match.
+		// Match is important as it forces the caller to deal with either case, i.e when it s an integer or when its a string
+		either.Match([](int leftValue)
+		{
+			std::cout << "Was an integer" << std::endl;
+		}, [](const char* rightValue)
+		{
+			std::cout << "Was an string" << std::endl;
+		});
+	}
+
 	TEST(EitherTests, MatchWhenRight)
 	{
 		constexpr auto errorCode = 35; // left
@@ -13,14 +29,14 @@ namespace Tests
 		Either<int, std::string> errorOrMessage = errorCode;
 
 		// What to return if its actually a string, i.e a right type
-		const std::string result = errorOrMessage.Match(
+		const std::string result = errorOrMessage.MatchTo(
 			[=](int) {return  resultIfLeft; },
 			[](std::string errorMessage) {return errorMessage;});
 		
 		EXPECT_EQ(result, resultIfLeft);
 
 		// What to return when its actually a integer, i.e a left type
-		const int result1 = errorOrMessage.Match(
+		const int result1 = errorOrMessage.MatchTo(
 			[=](const int error) {return  error; },
 			[](const std::string&) {return -1;});
 		
@@ -36,14 +52,14 @@ namespace Tests
 		Either<int, std::string> errorOrMessage = errorMessage;
 
 		// What to return if its actually a string, i.e a right type
-		const std::string result = errorOrMessage.Match(
+		const std::string result = errorOrMessage.MatchTo(
 			[=](int) {return  "Error"; },
 			[](std::string errorMessage) {return errorMessage;});
 		
 		EXPECT_EQ(result, errorMessage);
 
 		// What to return when its actually a integer, i.e a left type
-		const int result1 = errorOrMessage.Match(
+		const int result1 = errorOrMessage.MatchTo(
 			[=](const int error) {return  -1; },
 			[](const std::string&) {return 35;});
 		

@@ -21,12 +21,12 @@ namespace Tests
 		cout << "IsRight:"<< result.IsRight() << endl; // true
 
 		// Extract a number value from either
-		const int number = result.Match(
+		const int number = result.MatchTo(
 			[](int i) { return i;}, // return the number if it has one
 			[](string s) { return -1;}); // return a number if it doesn't contain one
 
 		// Extract a string value from either
-		const string str = result.Match(
+		const string str = result.MatchTo(
 			[](int i) { return to_string(i);}, // return a string if it doesn't contain one
 			[](string s) { return s;}); // return string
 
@@ -94,7 +94,7 @@ namespace Tests
 		
 		// either way, lets see what actually the result is before interpreting it as a code.
 		// Match can transform the result as right type (there is also an overload to turn it into a left type)
-		const string resultAsString = result.Match(
+		const string resultAsString = result.MatchTo(
 			[](const int i){ return std::to_string(i);},  
 			[](string s) {return s;}); // Could also use IfLeft does this return line implicitly
 
@@ -140,7 +140,7 @@ namespace Tests
 				return to_string(i);
 			});
 
-		const string expected = final.Match(
+		const string expected = final.MatchTo(
 			[]{ return string("failed"); }, // ifNone:
 			[](string s){ return s;}); // ifSome:
 

@@ -5,7 +5,22 @@ using namespace libmonad;
 using namespace std;
 
 namespace Tests
-{	
+{
+	TEST(OptionTests, Match)
+	{
+		Option<int> maybeNumber = 25;
+		maybeNumber = None();
+
+		// extract value using match.
+		// This is useful as it forces the caller to deal with a None  and a Some (Number) use-case
+		maybeNumber.Match([](None none)
+		{
+			std::cout << "Was None" << std::endl;
+		}, [](int number)
+		{
+			std::cout << "Was an number" << std::endl;
+		});
+	}
 	
 	TEST(OptionTests, Basics)
 	{
@@ -28,8 +43,8 @@ namespace Tests
 		EXPECT_TRUE(maybeNumber.IsSome());
 		EXPECT_FALSE(maybeNumber.IsNone());
 
-		// extract value
-		auto floatValue = result.Match(
+		// extract value using match
+		auto floatValue = result.MatchTo(
 			[]() { return "0.0f";},
 			[](const string& s) {return s;});
 
@@ -42,7 +57,7 @@ namespace Tests
 		EXPECT_TRUE(result.IsNone());
 
 		// map nothing
-		floatValue = result.Match(
+		floatValue = result.MatchTo(
 			[]() { return "0.0f";},
 			[](string s) {return s;});
 
@@ -64,7 +79,7 @@ namespace Tests
 			return Option<string>(string("true"));
 		});
 
-		auto result = a.Match(
+		auto result = a.MatchTo(
 			[]() { return string("failed"); },
 			[](string s){ return s;});
 
@@ -79,7 +94,7 @@ namespace Tests
 			return Option<string>(string("true"));
 		});
 
-		result = a.Match(
+		result = a.MatchTo(
 			[]() { return string("failed"); },
 			[](string s){ return s;});
 

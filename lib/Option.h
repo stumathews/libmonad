@@ -39,7 +39,7 @@ namespace libmonad
 				std::function<Either<None, T2>(T)> fn2 = [=](T t)
 				{
 					return ToEither(
-							transform(t).Match(
+							transform(t).MatchTo(
 								[&](None n){ return Option<T2>();},
 								[&](Option<T2> t2) { return t2;}));
 				};
@@ -47,16 +47,16 @@ namespace libmonad
 				return ToOption(value.Bind(fn2));
 			}
 			
-			T Match(std::function<T()> ifNone, std::function<T(T)> ifSome )
+			T MatchTo(std::function<T()> ifNone, std::function<T(T)> ifSome )
 			{
-				return value.Match(
+				return value.MatchTo(
 					[=](None n){return ifNone();},
 					[=](T t){return ifSome(t);});
 			}
 
 			void Match(const std::function<void(None)>& ifNone, std::function<void(T)> ifSome )
 			{
-				return value.MatchVoid(
+				return value.Match(
 					[=](None n){ ifNone(n); },
 					[=](T t){ ifSome(t); });
 			}
@@ -66,7 +66,7 @@ namespace libmonad
 			{
 				Option<T2> option = None();
 				
-				either.MatchVoid(
+				either.Match(
 					[&](None n){ option = None(); }, 
 					[&](T2 t2){ option = t2;});
 				return option;

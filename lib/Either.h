@@ -55,14 +55,14 @@ namespace libmonad
 		 * \param ifRight what to return if either contains right value
 		 * \return left value
 		 */
-		L Match(std::function<L(L)> ifLeft, std::function<L(R)> ifRight);
+		L MatchTo(std::function<L(L)> ifLeft, std::function<L(R)> ifRight);
 
 		/**
 		 * \brief perform action depending on the type value
 		 * \param  ifLeft action to perform if Left
 		 * \param  ifRight action to perform if Right
 		 */
-		void MatchVoid(std::function<void(L)> ifLeft, std::function<void(R)> ifRight);
+		void Match(std::function<void(L)> ifLeft, std::function<void(R)> ifRight);
 
 		/**
 		 * \brief what left value to return if either contains right value
@@ -77,7 +77,7 @@ namespace libmonad
 		 * \param ifRight the right value to return if either contains the right value
 		 * \return right value
 		 */
-		R Match(std::function<R(L)> ifLeft, std::function<R(R)> ifRight);
+		R MatchTo(std::function<R(L)> ifLeft, std::function<R(R)> ifRight);
 
 		/**
 		 * \brief what right value to return if either contains a left value
@@ -147,21 +147,21 @@ namespace libmonad
 	}
 
 	template <typename L, typename R>
-	R Either<L, R>::Match(std::function<R(L)> ifLeft, std::function<R(R)> ifRight )
+	R Either<L, R>::MatchTo(std::function<R(L)> ifLeft, std::function<R(R)> ifRight )
 	{
 		CheckIfInitialized();
 		return isLeft ? ifLeft(leftValue) : ifRight(rightValue);
 	}
 
 	template <typename L, typename R>
-	L Either<L, R>::Match(std::function<L(L)> ifLeft, std::function<L(R)> ifRight)
+	L Either<L, R>::MatchTo(std::function<L(L)> ifLeft, std::function<L(R)> ifRight)
 	{
 		CheckIfInitialized();
 		return isLeft ? ifLeft(leftValue) : ifRight(rightValue);
 	}	
 
 	template <typename L, typename R>
-	void Either<L, R>::MatchVoid(std::function<void(L)> ifLeft, std::function<void(R)> ifRight)
+	void Either<L, R>::Match(std::function<void(L)> ifLeft, std::function<void(R)> ifRight)
 	{
 		CheckIfInitialized();
 		isLeft ? ifLeft(leftValue) : ifRight(rightValue);

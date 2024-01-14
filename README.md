@@ -42,17 +42,36 @@ Either<int, float> transformed2 = transformed.Bind<float>([](Either<int, string>
 });
 ```
 
-#### Full example with Match and IfRight
+### Match
+
+```cpp
+Either<int, const char*> either = "A phrase";
+
+// To extract the value or determine what it is, you match.
+// Match is important as it forces the caller to deal with either case, i.e when it s an integer or when its a string
+either.Match([](int leftValue)
+{
+    // deal with when integer 
+    std::cout << "Was an integer" << std::endl;
+}, [](const char* rightValue)
+{
+    // deal with when string
+    std::cout << "Was an string" << std::endl;
+});
+
+```
+
+#### MatchTo and IfRight
 
 Match allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type. You chose.
 
 The programmer defines what the transformation function that will do, depending on the version of the Match overload called, eg:
 
-1. Match (L, R) -> R // this will allow you to always get a right value out of the either (you need to convert a left value to a right value)
+1. MatchTo (L, R) -> R // this will allow you to always get a right value out of the either (you need to convert a left value to a right value)
 
 You can also use IfLeft() which is simpler but does not allow you to modify the right value into something  
 
-2. Match( L, R) -> L // this will allow you to always get a left value out of the either (you need to convert a right value to a left value)
+2. MatchTo( L, R) -> L // this will allow you to always get a left value out of the either (you need to convert a right value to a left value)
 
    You can also use IfRight() which is simpler but does not allow you to modify the left value into something
 
@@ -164,6 +183,25 @@ const string expected = final.Match(
 EXPECT_EQ(expected, "672");
 ```
 
+### Match
+
+Match works the same way it does with Eithers. i.e it allows you to extract the underlying value, and then to deal with it.
+
+```cpp
+Option<int> maybeNumber = 25;
+maybeNumber = None();
+
+// extract value using match.
+// This is useful as it forces the caller to deal with a None  and a Some (Number) use-case
+maybeNumber.Match([](None none)
+{
+	std::cout << "Was None" << std::endl;
+}, [](int number)
+{
+	std::cout << "Was an number" << std::endl;
+});
+```
+
 #### Short circuiting
 ```cpp
 Option<int> option = 25;
@@ -186,3 +224,5 @@ const auto result2 = option1
 EXPECT_TRUE(result2.IsNone());
 EXPECT_FALSE(result2.IsSome());
 ```
+
+
