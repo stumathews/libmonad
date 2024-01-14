@@ -40,7 +40,7 @@ Either<int, float> transformed2 = transformed.Bind<float>([](Either<int, string>
 });
 ```
 
-### Match
+#### Match
 
 ```cpp
 Either<int, const char*> either = "A phrase";
