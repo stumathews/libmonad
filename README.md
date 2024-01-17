@@ -1,5 +1,5 @@
 # libmonad
-C++ header-only library of Monads
+Simple C++ Monads header-only library for small projects
 
 Currently the following monads are supported:
 - Either<L,R>
