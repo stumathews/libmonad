@@ -63,6 +63,7 @@ either.Match([](int leftValue)
 ```cpp
 Either<int, std::string> code = 44;
 
+// Do a series of transformations...
 const Either<int, std::string> result =
 code.Map<std::string>([](std::string s){ return std::string("55");});
 code.Map<std::string>([](std::string s){ return 22;}); // short circuits because we have a left value now
@@ -73,9 +74,14 @@ EXPECT_TRUE(result.IsLeft());
 
 ### Option<T>
 
+Options can hold the underlying type, ie Option<int> might hold an int type or it might hold a None.
+
 ```cpp
 // Declare and option of integer
-Option<int> result = 56;	
+Option<int> result;
+
+result = None(); // can hold a None or...
+result = 56;	// can hold an integer
 
 auto yourMapFunction = [](int i) { };
 auto yourBindFunction = [](const int i) { return Option<int>(i);};
@@ -200,7 +206,7 @@ Either<int, string> result = impureFunction();
 auto downStreamFunction = [](const int number) { return number + 2; };
 
 // either way, lets see what actually the result is before interpreting it as a code
-// Match can transform the result as right type (there is also an overload to turn it into a left type)
+// MatchTo can transform the result as right type (there is also an overload to turn it into a left type)
 const string resultAsString = result.MatchTo(
   [](const int i){ return std::to_string(i);},  
   [](string s) {return s;}); // Could also use IfLeft does this return line implicitly
