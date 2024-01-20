@@ -83,28 +83,15 @@ Option<int> result;
 result = None(); // can hold a None or...
 result = 56;	// can hold an integer
 
-auto yourMapFunction = [](int i) { };
+auto yourMapFunction = [](int i) { return i; };
 auto yourBindFunction = [](const int i) { return Option<int>(i);};
 
-// Transformation time:
+// Transformations time:
 Option<string> final = result
-  .Map<int>([](const int i)
-  {
-    return i * 12; // 672
-  })
-  .Map<int>([=](const int i)
-  {
-    yourMapFunction(i);
-    return i;
-  })
-  .Bind<int>([=](int i)
-  {
-    return yourBindFunction(i);
-  })
-  .Map<string>([](const int i)
-  {
-    return to_string(i);
-  });
+  .Map<int>([](const int i) { return i * 12; // 672 })
+  .Map<int>([=](const int i) { return yourMapFunction(i); })
+  .Bind<int>([=](int i) { return yourBindFunction(i);})
+  .Map<string>([](const int i) { return to_string(i); });
 
 const string expected = final.Match(
   []{ return string("failed"); }, // ifNone:
@@ -155,7 +142,9 @@ EXPECT_TRUE(result2.IsNone());
 EXPECT_FALSE(result2.IsSome());
 ```
 
-### MatchTo() and IfRight()
+### Other operations
+
+#### MatchTo() and IfRight()
 
 For Either<Left,Right>, MatchTo() allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type. You chose.
 
