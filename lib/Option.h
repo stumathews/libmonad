@@ -54,6 +54,13 @@ namespace libmonad
 					[=](T t){return ifSome(t);});
 			}
 
+			T WhenNone(std::function<T()> ifNone)
+			{
+				return value.MatchTo(
+					[=](None n){ return ifNone(); },
+					[=](T t){ return t; });
+			}
+
 			void Match(const std::function<void(None)>& ifNone, std::function<void(T)> ifSome )
 			{
 				return value.Match(

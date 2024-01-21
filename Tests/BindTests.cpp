@@ -1,4 +1,7 @@
 #include "pch.h"
+
+#include <string>
+
 #include "..\lib\Either.h"
 using namespace libmonad;
 

@@ -5,12 +5,12 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmonad", "lib\lib.vcxproj", "{A63D4542-48CA-4D12-ACAE-F35A729C40D0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{CDB1EF51-1996-4362-8DA3-54575EFC516C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A968E605-D60B-4B8A-8598-64686AD4D497}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmonadTests", "Tests\LibMonadTests.vcxproj", "{CDB1EF51-1996-4362-8DA3-54575EFC516C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
