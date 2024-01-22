@@ -33,7 +33,7 @@ Either<int, string> = either.Map<string>([](const string& in)
 
 #### Bind
 ```cpp
-// Can also use a bind Transform
+// Can also use a bind transform, i.e we need return another Either during the transform
 Either<int, float> transformed2 = transformed.Bind<float>([](Either<int, string> in)
 {
   return Either<int, float>(0.0f); // returns new Either with different Right type - float
