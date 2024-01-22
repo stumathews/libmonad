@@ -15,7 +15,7 @@ namespace Tests
 		auto result = either.Map<std::string>([=](char c) { return string5; });
 
 		// if its a right type (it isn't) return 15 - should not work
-		const auto result2 = result.IfRight([](std::string) { return 15;});
+		const auto result2 = result.WhenRight([](std::string) { return 15;});
 
 		// Ensure it stays at 5 as it was a left value so map should not transform it
 		EXPECT_EQ(result2, 5);
@@ -33,7 +33,7 @@ namespace Tests
 		auto result = either.Map<std::string>([=](char c) { return string5; });
 
 		// if its a left type (it isn't) return - should not work
-		const auto result2 = result.IfLeft([](int i) { return std::string("shit");});
+		const auto result2 = result.WhenLeft([](int i) { return std::string("shit");});
 
 		// Ensure it transformed to a string 'five' as it was a right value so map should transform it
 		EXPECT_EQ(result2, string5);
@@ -51,7 +51,7 @@ namespace Tests
 		.Map<float>([=](char c) { return finalTransformation;}); // transform char to float
 
 		// extract right value
-		const auto result2 = result.IfLeft([](const std::string&) { return 0.0f;});
+		const auto result2 = result.WhenLeft([](const std::string&) { return 0.0f;});
 
 		// Ensure right value was the last transformation at the end
 		EXPECT_EQ(result2, finalTransformation);
@@ -70,7 +70,7 @@ namespace Tests
 		.Map<float>([=](char c) { return finalTransformation;}); // not run
 
 		// extract right value
-		const auto result2 = result.IfLeft([](const std::string&) { return 0.0f;});
+		const auto result2 = result.WhenLeft([](const std::string&) { return 0.0f;});
 
 		// Ensure right value is the right value when its actually a left in the either
 		EXPECT_EQ(result2, 0.0f);

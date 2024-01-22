@@ -21,12 +21,12 @@ namespace Tests
 		cout << "IsRight:"<< result.IsRight() << endl; // true
 
 		// Extract a number value from either
-		const int number = result.MatchTo(
+		const int number = result.When(
 			[](int i) { return i;}, // return the number if it has one
 			[](string s) { return -1;}); // return a number if it doesn't contain one
 
 		// Extract a string value from either
-		const string str = result.MatchTo(
+		const string str = result.When(
 			[](int i) { return to_string(i);}, // return a string if it doesn't contain one
 			[](string s) { return s;}); // return string
 
@@ -51,7 +51,7 @@ namespace Tests
 		});
 
 		// it could have been a number, in which case we can tell it how to represent that number as a right-value (or string type)
-		const string witherWay = transformed.IfLeft([](const int number) { return string("Could not transform correctly as it was a number:  ") + to_string(number) ;});
+		const string witherWay = transformed.WhenLeft([](const int number) { return string("Could not transform correctly as it was a number:  ") + to_string(number) ;});
 
 		// either way, out code now can deal with strings uniformly even if it was a number
 		cout << witherWay << endl;
@@ -94,12 +94,12 @@ namespace Tests
 		
 		// either way, lets see what actually the result is before interpreting it as a code.
 		// Match can transform the result as right type (there is also an overload to turn it into a left type)
-		const string resultAsString = result.MatchTo(
+		const string resultAsString = result.When(
 			[](const int i){ return std::to_string(i);},  
 			[](string s) {return s;}); // Could also use IfLeft does this return line implicitly
 
 		// If it is a error message, we want that to be a code, and will make that a code of -1 (and report the error)
-		const int code = result.IfRight([](const string& error)
+		const int code = result.WhenRight([](const string& error)
 		{
 			cout << "We had an error: " << error << endl;
 			return -1;

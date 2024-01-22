@@ -100,7 +100,7 @@ const string expected = final.Match(
 EXPECT_EQ(expected, "672");
 ```
 
-### Match
+#### Match
 
 Match works the same way it does with Eithers. i.e it allows you to extract the underlying value, and then to deal with it.
 
@@ -142,21 +142,39 @@ EXPECT_TRUE(result2.IsNone());
 EXPECT_FALSE(result2.IsSome());
 ```
 
+#### WhenNone()
+
+This is related to Match, i.e it is concerned with extracting the underlying value of Option.
+If the underlying value of an Option is None, you can choose to get a specific value instead, otherwise it will return the underlying value:
+
+```cpp
+std::string expectedStringWhenNone = "NothingFound";
+const std::string expectedStringWhenNotNone = "IFoundSomethingWonderful!";
+
+Option<std::string> itemKey = None();
+
+const auto resultWhenNone = itemKey.WhenNone([&]{ return expectedStringWhenNone;});
+
+EXPECT_EQ(resultWhenNone, expectedStringWhenNone);
+```
+
 ### Other operations
 
-#### MatchTo() and IfRight()
+#### When() and WhenRight()
 
-For Either<Left,Right>, MatchTo() allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type. You chose.
+When(left, right), WhenLeft(), WhenRight() are related to Match() in as much as they are concerned with extracting the underlying value of the Either
+
+For Either<Left,Right>, When() allows you, irrespective of which type of value it contains, to be transformed to always a left type or always the right type. You chose.
 
 The programmer defines what the transformation function that will do, depending on the version of the Match overload called, eg:
 
-1. MatchTo (L, R) -> R // this will allow you to always get a right value out of the either (you need to convert a left value to a right value)
+1. When (L, R) -> R // this will allow you to always get a right value out of the either (you need to convert a left value to a right value)
 
-You can also use IfLeft() which is simpler but does not allow you to modify the right value into something  
+You can also use WhenLeft() which is simpler but does not allow you to modify the right value into something  
 
-2. MatchTo( L, R) -> L // this will allow you to always get a left value out of the either (you need to convert a right value to a left value)
+2. When( L, R) -> L // this will allow you to always get a left value out of the either (you need to convert a right value to a left value)
 
-   You can also use IfRight() which is simpler but does not allow you to modify the left value into something
+   You can also use WhenRight() which is simpler but does not allow you to modify the left value into something
 
 Eg:
 ```cpp
@@ -195,14 +213,14 @@ Either<int, string> result = impureFunction();
 auto downStreamFunction = [](const int number) { return number + 2; };
 
 // either way, lets see what actually the result is before interpreting it as a code
-// MatchTo can transform the result as right type (there is also an overload to turn it into a left type)
-const string resultAsString = result.MatchTo(
+// When can transform the result as right type (there is also an overload to turn it into a left type)
+const string resultAsString = result.When(
   [](const int i){ return std::to_string(i);},  
   [](string s) {return s;}); // Could also use IfLeft does this return line implicitly
 
 // If it is a error message, we want that to be a code,
 // and will make that a code of -1 (end report the error)
-const int code = result.IfRight([](const string&)
+const int code = result.WhenRight([](const string&)
 {
   cout << "We had an error: " << error << endl;
   return -1;

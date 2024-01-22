@@ -20,7 +20,7 @@ namespace Tests
 			return libmonad::Either<int, char>('c'); // transform to Either<int, char>
 		});
 
-		const auto result3 = result2.IfLeft([](int i) { return '0';});
+		const auto result3 = result2.WhenLeft([](int i) { return '0';});
 		EXPECT_EQ(result3, 'c');
 	}
 
@@ -40,7 +40,7 @@ namespace Tests
 			return libmonad::Either<int, float>(99.0f); // transform to Either<int, float>
 		});
 
-		const auto result3 = result2.IfLeft([](int i) { return '0';});
+		const auto result3 = result2.WhenLeft([](int i) { return '0';});
 		EXPECT_EQ(result3, 99.0f);
 	}
 

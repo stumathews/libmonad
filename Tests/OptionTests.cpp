@@ -127,4 +127,23 @@ namespace Tests
 		EXPECT_FALSE(result2.IsSome());
 
 	}
+
+	TEST(OptionTests, WhenNone)
+	{
+		std::string expectedStringWhenNone = "NothingFound";
+		const std::string expectedStringWhenNotNone = "IFoundSomethingWonderful!";
+
+		Option<std::string> itemKey = None();
+
+		const auto resultWhenNone = itemKey.WhenNone([&]{ return expectedStringWhenNone;});
+
+		EXPECT_EQ(resultWhenNone, expectedStringWhenNone);
+
+		// negative test...
+		itemKey = expectedStringWhenNotNone;
+
+		const auto resultWhenNotNone = itemKey.WhenNone([&]{ return expectedStringWhenNone;});		
+		EXPECT_EQ(resultWhenNotNone, expectedStringWhenNotNone);
+
+	}
 }

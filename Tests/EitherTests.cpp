@@ -29,14 +29,14 @@ namespace Tests
 		Either<int, std::string> errorOrMessage = errorCode;
 
 		// What to return if its actually a string, i.e a right type
-		const std::string result = errorOrMessage.MatchTo(
+		const std::string result = errorOrMessage.When(
 			[=](int) {return  resultIfLeft; },
 			[](std::string errorMessage) {return errorMessage;});
 		
 		EXPECT_EQ(result, resultIfLeft);
 
 		// What to return when its actually a integer, i.e a left type
-		const int result1 = errorOrMessage.MatchTo(
+		const int result1 = errorOrMessage.When(
 			[=](const int error) {return  error; },
 			[](const std::string&) {return -1;});
 		
@@ -52,14 +52,14 @@ namespace Tests
 		Either<int, std::string> errorOrMessage = errorMessage;
 
 		// What to return if its actually a string, i.e a right type
-		const std::string result = errorOrMessage.MatchTo(
+		const std::string result = errorOrMessage.When(
 			[=](int) {return  "Error"; },
 			[](std::string errorMessage) {return errorMessage;});
 		
 		EXPECT_EQ(result, errorMessage);
 
 		// What to return when its actually a integer, i.e a left type
-		const int result1 = errorOrMessage.MatchTo(
+		const int result1 = errorOrMessage.When(
 			[=](const int error) {return  -1; },
 			[](const std::string&) {return 35;});
 		
@@ -76,12 +76,12 @@ namespace Tests
 		Either<int, std::string> errorOrMessage = errorCode;
 
 		// What to return if its actually a int, i.e a left type
-		const std::string result = errorOrMessage.IfLeft([=](int code) {return resultIfLeft;}); 
+		const std::string result = errorOrMessage.WhenLeft([=](int code) {return resultIfLeft;}); 
 		
 		EXPECT_EQ(result, resultIfLeft);
 
 		// What to return when its actually a string, i.e a right type
-		const int result1 = errorOrMessage.IfRight([](const std::string&) {return -1;});
+		const int result1 = errorOrMessage.WhenRight([](const std::string&) {return -1;});
 		
 		EXPECT_EQ(result1, errorCode);
 	}
@@ -95,13 +95,13 @@ namespace Tests
 		Either<int, std::string> errorOrMessage = errorMessage;
 
 		// What to return if its actually a int, i.e a left type
-		const std::string result = errorOrMessage.IfLeft(
+		const std::string result = errorOrMessage.WhenLeft(
 			[=](int) {return  "Error"; });
 		
 		EXPECT_EQ(result, errorMessage);
 
 		// What to return when its actually a string, i.e a right type
-		const int result1 = errorOrMessage.IfRight([](const std::string&) {return 35;});
+		const int result1 = errorOrMessage.WhenRight([](const std::string&) {return 35;});
 		
 		EXPECT_EQ(result1, 35);
 	}
