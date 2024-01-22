@@ -148,13 +148,16 @@ This is related to Match, i.e it is concerned with extracting the underlying val
 If the underlying value of an Option is None, you can choose to get a specific value instead, otherwise it will return the underlying value:
 
 ```cpp
-std::string expectedStringWhenNone = "NothingFound";
-const std::string expectedStringWhenNotNone = "IFoundSomethingWonderful!";
+string expectedStringWhenNone = "NothingFound";
+const string expectedStringWhenNotNone = "IFoundSomethingWonderful!";
 
-Option<std::string> itemKey = None();
+// Item key could be a string or it could be none (or nullptr)
+Option<string> itemKey = None();
 
+// When the itemKey is None, transform it to a specific string, otherwise use the string that is already has.
 const auto resultWhenNone = itemKey.WhenNone([&]{ return expectedStringWhenNone;});
 
+// Note, the value of resultWhenNone will be the original string if the itemKey is set to a string and not a None.
 EXPECT_EQ(resultWhenNone, expectedStringWhenNone);
 ```
 
