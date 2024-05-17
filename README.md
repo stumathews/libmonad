@@ -14,10 +14,10 @@ An Either type can contain either one of two types of values. eg, number or stri
 We'll interpret numbers are error codes, and we'll interpret strings as successful string transformations.
 
 ```cpp
-Either<int, string> either = 25; //  its an int now, a right type value 
-either = string("I made something wonderful"); //  its a string now, a left type value 
+Either<int, string> either = 25; //  its an int now, a left type value 
+either = string("I made something wonderful"); //  its a string now, a riht type value 
 ```
-We can transform the right value to another right value
+We can transform the right value to another, completely different, right type value
 
 #### Map
 
