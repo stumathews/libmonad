@@ -59,7 +59,8 @@ namespace Tests
 
 	TEST(ExampleTests, MatchAndIfRight)
 	{
-		srand(time(nullptr));
+		time_t t;
+		srand((unsigned) time(&t));
 
 		// This is a function that has variable outcomes
 		auto impureFunction = []() -> Either<int, string>
