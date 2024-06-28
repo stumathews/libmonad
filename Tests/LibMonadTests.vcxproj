@@ -34,6 +34,11 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+	<!-- Redefine  CommonIncludePath and CommonLibraryPath if not set by common.targets -->
+	<PropertyGroup>
+		<CommonIncludePath Condition="'$(CommonIncludePath)' == ''">$(SolutionDir)\lib;$(VC_IncludePath_x64);$(WindowsSdk_IncludePath);$(IncludePath)</CommonIncludePath>
+		<CommonLibraryPath Condition="'$(CommonLibraryPath)' == ''">$(SolutionDir)\$(Platform)\$(Configuration);$(WindowsSdk_LibraryPath_x64);$(VC_LibraryPath_x64);$(LibraryPath)</CommonLibraryPath>
+	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(CommonIncludePath);$(VC_IncludePath_x64);$(WindowsSdk_IncludePath);$(IncludePath)</IncludePath>
