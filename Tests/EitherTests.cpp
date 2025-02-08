@@ -125,4 +125,20 @@ namespace Tests
 		EXPECT_FALSE(either.IsBottom());
 
 	}
+
+	TEST(EitherTests, ThrowIfLeft)
+	{
+		Either<int, float> number;
+
+		number = 12.0f;
+
+		EXPECT_NO_THROW(number.ThrowIfLeft());
+		EXPECT_TRUE(number.IsRight());
+		EXPECT_FALSE(number.IsLeft());
+
+		number = 12;
+
+		EXPECT_THROW(number.ThrowIfLeft(), std::exception);
+
+	}
 }

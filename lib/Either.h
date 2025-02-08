@@ -87,6 +87,12 @@ namespace libmonad
 		R WhenLeft(std::function<R(L)> ifLeft);
 
 		/**
+		 * Returns right value by default or throws if left value
+		 * @return 
+		 */
+		R ThrowIfLeft();
+
+		/**
 		 * \brief Determine of either contains the left type value
 		 * \return true if either contains left value
 		 */
@@ -179,6 +185,13 @@ namespace libmonad
 	{
 		CheckIfInitialized();
 		return isLeft ? leftValue : ifRight(rightValue);
+	}
+
+	template <typename L, typename R>
+	R Either<L, R>::ThrowIfLeft()
+	{
+		if (IsLeft()) throw std::exception("ThrowIfLeft");
+		return rightValue;
 	}
 
 	template <typename L, typename R>
