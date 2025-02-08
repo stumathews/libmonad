@@ -8,16 +8,16 @@ namespace libmonad
 {
 
 		struct None {};
-		
+			
 		template <typename T>
 		class Option
-		{		
+		{
 			bool isNone {};
 			Either<None,T> value {};			
 
 		public:
 			
-			Option(T in): value(std::move(in)) { }
+			Option(T in): value(in){}
 			Option(None n = {}){ value = n; }
 						
 			bool IsNone() const { return value.IsLeft(); }
@@ -47,15 +47,21 @@ namespace libmonad
 				return ToOption(value.Bind(fn2));
 			}
 
-			T ThrowIfNone()
+			T ThrowIfNone(Option<std::string> optionalMessage = None())
 			{
 				T result;
-				value.Match(
-					[](None){ throw std::exception("ThrowIfNone"); }, 
-					[&](T some)
-					{
-						result = some;
-					});
+
+				try
+				{
+					result = value.ThrowIfLeft();
+				}
+				catch (std::exception&)
+				{
+					optionalMessage.Match(
+							[](None none){ throw std::exception("ThrowIfNone"); },
+							[](const std::string& message){ throw std::exception(message.c_str()); }
+					);
+				}
 
 				return result;
 			}

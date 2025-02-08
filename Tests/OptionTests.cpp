@@ -160,6 +160,31 @@ namespace Tests
 		maybeString = None();
 
 		EXPECT_THROW(maybeString.ThrowIfNone(), std::exception);
+		std::string message = "something fierce";
+
+		try
+		{
+			// pass a message
+			maybeString.ThrowIfNone(message);
+			FAIL();
+		}
+		catch (std::exception& e)
+		{
+			// check it passed message to thrown exception
+			EXPECT_STREQ(e.what(), message.c_str());
+		}
+
+		try
+		{
+			// pass a string literal
+			maybeString.ThrowIfNone("yoyo"s);
+			FAIL();
+		}
+		catch (std::exception& e)
+		{
+			// check it passed message to thrown exception
+			EXPECT_STREQ(e.what(), "yoyo");
+		}
 
 	};
 }
