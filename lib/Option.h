@@ -51,17 +51,16 @@ namespace libmonad
 			{
 				T result;
 
-				try
-				{
-					result = value.ThrowIfLeft();
-				}
-				catch (std::exception&)
+				value.Match([&](None none)
 				{
 					optionalMessage.Match(
-							[](None none){ throw std::exception("ThrowIfNone"); },
+							[](None){ throw std::exception("ThrowIfNone"); },
 							[](const std::string& message){ throw std::exception(message.c_str()); }
 					);
-				}
+				}, [&](T some)
+				{
+					result = some;
+				});
 
 				return result;
 			}
