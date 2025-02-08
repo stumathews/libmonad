@@ -46,6 +46,19 @@ namespace libmonad
 				
 				return ToOption(value.Bind(fn2));
 			}
+
+			T ThrowIfNone()
+			{
+				T result;
+				value.Match(
+					[](None){ throw std::exception("ThrowIfNone"); }, 
+					[&](T some)
+					{
+						result = some;
+					});
+
+				return result;
+			}
 			
 			T MatchTo(std::function<T()> ifNone, std::function<T(T)> ifSome )
 			{

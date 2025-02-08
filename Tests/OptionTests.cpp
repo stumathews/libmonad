@@ -146,4 +146,20 @@ namespace Tests
 		EXPECT_EQ(resultWhenNotNone, expectedStringWhenNotNone);
 
 	}
+
+	TEST(OptionTests, ThrowIfNone)
+	{
+		Option<std::string> maybeString {"Stuart"};
+				
+		EXPECT_NO_THROW(maybeString.ThrowIfNone());
+
+		maybeString.Match(
+			[](None none) {  FAIL(); },
+			[](const string& str) { EXPECT_STREQ(str.c_str(), "Stuart"); });
+
+		maybeString = None();
+
+		EXPECT_THROW(maybeString.ThrowIfNone(), std::exception);
+
+	};
 }
