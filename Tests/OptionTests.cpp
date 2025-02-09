@@ -150,21 +150,31 @@ namespace Tests
 	TEST(OptionTests, ThrowIfNone)
 	{
 		Option<std::string> maybeString {"Stuart"};
-				
+
+		// It should not throw as the option is set to a string
 		EXPECT_NO_THROW(maybeString.ThrowIfNone());
 
+		// Of course the whole point of ThrowIfNone() is to get the underlying value if its not a none:
+		auto theString = maybeString.ThrowIfNone();
+
+		// We got the string, make sure its correct
+		EXPECT_STREQ(theString.c_str(), "Stuart");
+
+		// Double check that it not a None (we know its not due to above)
 		maybeString.Match(
 			[](None none) {  FAIL(); },
 			[](const string& str) { EXPECT_STREQ(str.c_str(), "Stuart"); });
 
+		// Now unset it
 		maybeString = None();
 
+		// Should throw
 		EXPECT_THROW(maybeString.ThrowIfNone(), std::exception);
-		std::string message = "something fierce";
+		std::string message = "Bad juju! Value can't be none here!";
 
 		try
 		{
-			// pass a message
+			// pass a message to use in the exception as a variable
 			maybeString.ThrowIfNone(message);
 			FAIL();
 		}
@@ -176,14 +186,14 @@ namespace Tests
 
 		try
 		{
-			// pass a string literal
-			maybeString.ThrowIfNone("yoyo"s);
+			// pass a string literal as 
+			maybeString.ThrowIfNone("Bad juju! Value can't be none here!"s);
 			FAIL();
 		}
 		catch (std::exception& e)
 		{
 			// check it passed message to thrown exception
-			EXPECT_STREQ(e.what(), "yoyo");
+			EXPECT_STREQ(e.what(), "Bad juju! Value can't be none here!");
 		}
 
 	};

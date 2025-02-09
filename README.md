@@ -59,6 +59,29 @@ either.Match([](int leftValue)
 
 ```
 
+#### ThrowIfLeft
+
+This will is like Match, in as much as it will attempt to extract the underlying right value of the Monad but will throw if the monad is set to left type.
+
+```cpp
+
+// Either an integer (left type) of a floating point number (right type)
+Either<int, float> number;
+
+// Now its set to right value
+number = 12.0f;
+
+// Get right value via ThrowIfLeft()...should not throw as it is not a left value
+EXPECT_NO_THROW(number.ThrowIfLeft());
+
+// Now set it to a left value (integer)
+number = 12;
+
+// This should throw 
+EXPECT_THROW(number.ThrowIfLeft(), std::exception);
+
+```
+
 #### Short circuiting
 ```cpp
 Either<int, std::string> code = 44;
@@ -159,6 +182,44 @@ const auto resultWhenNone = itemKey.WhenNone([&]{ return expectedStringWhenNone;
 
 // Note, the value of resultWhenNone will be the original string if the itemKey is set to a string and not a None.
 EXPECT_EQ(resultWhenNone, expectedStringWhenNone);
+```
+
+#### ThrowIfNone()
+
+This is also related to Match, i.e it is concerned with extracting hre underlying value of the Option when you want to use it.
+This function will return the underlying type so you can use it, but if its None, it will throw an exception instead. 
+This makes this much quicker to use than Match as it will extract the value and let you use it. This is used normally when you know
+at certain times in the application that the Option really should not be none at this point and you want to abort the flow at this point.
+
+```cpp
+
+// Our optional string
+Option<std::string> maybeString {"Stuart"};
+
+// Of course the whole point of ThrowIfNone() is to get the underlying value if its not a none:
+auto theString = maybeString.ThrowIfNone();
+
+// We got the string, make sure its correct
+EXPECT_STREQ(theString.c_str(), "Stuart");
+
+// Now we have effectively removed the Option and are left with a string (but only if there was a string in there to begin with!)
+
+// Now unset it, and make sure it would throw if you tried to extract the string from it
+maybeString = None();
+
+// We'll ask ThrowIfNone() to throw with this message
+std::string message = "Bad juju! Value can't be none here!";
+
+try
+{
+    // Extract string
+    auto theString = maybeString.ThrowIfNone(message);
+}
+catch (std::exception& e)
+{
+    // check it passed message to thrown exception
+    EXPECT_STREQ(e.what(), message.c_str());
+}
 ```
 
 ### Other operations
