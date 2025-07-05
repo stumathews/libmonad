@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27)
+	cmake_minimum_required(VERSION 3.27)
 
 project(monad VERSION 1.0)
 
@@ -33,3 +33,4 @@ add_executable(
 # Set the libaries to link to for the AllTests target
 target_link_libraries(AllTests PRIVATE GTest::gtest_main)
 
+install(TARGETS monad RUNTIME DESTINATION bin)
