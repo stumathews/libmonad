@@ -1,4 +1,4 @@
-	cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.27)
 
 project(monad VERSION 1.0)
 
@@ -6,7 +6,7 @@ find_package(GTest REQUIRED)
 
 add_library(monad INTERFACE)
 
-set_target_properties(monad PROPERTIES LINKER_LANGUAGE CXX)
+#set_target_properties(monad PROPERTIES LINKER_LANGUAGE CXX)
 
 target_include_directories(monad INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
