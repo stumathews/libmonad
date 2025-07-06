@@ -37,7 +37,7 @@ target_link_libraries(AllTests PRIVATE monad GTest::gtest_main)
 target_sources(monad INTERFACE
         FILE_SET HEADERS FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/lib/Option.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib/Either.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/Either.h
     )
 
-install(TARGETS monad RUNTIME DESTINATION bin)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib/Option.h ${CMAKE_CURRENT_SOURCE_DIR}/lib/Either.h DESTINATION include)
