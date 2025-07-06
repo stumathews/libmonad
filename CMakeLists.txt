@@ -4,11 +4,11 @@ project(monad VERSION 1.0)
 
 find_package(GTest REQUIRED)
 
-add_library(monad STATIC lib/Either.h lib/Option.h)
+add_library(monad INTERFACE)
 
 set_target_properties(monad PROPERTIES LINKER_LANGUAGE CXX)
 
-target_include_directories(monad PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(monad INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # GoogleTest requires at least C++17
 
@@ -31,6 +31,13 @@ add_executable(
 )
 
 # Set the libaries to link to for the AllTests target
-target_link_libraries(AllTests PRIVATE GTest::gtest_main)
+target_link_libraries(AllTests PRIVATE monad GTest::gtest_main)
+
+# make your header files visible in IDEs like Visual Studio.
+target_sources(monad INTERFACE
+        FILE_SET HEADERS FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/Option.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/Either.hpp
+    )
 
 install(TARGETS monad RUNTIME DESTINATION bin)
