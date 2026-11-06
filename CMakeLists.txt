@@ -1,32 +1,43 @@
+
 cmake_minimum_required(VERSION 3.27)
 
-project(libmonad VERSION 1.0)
-
-find_package(GTest REQUIRED)
-
-add_library(monad lib/Either.h lib/Option.h)
-
-set_target_properties(monad PROPERTIES LINKER_LANGUAGE CXX)
-
-# GoogleTest requires at least C++17
+project(libmonad VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-enable_testing()
+# Header-only library
+add_library(monad INTERFACE)
 
-find_package(GTest CONFIG REQUIRED)
-
-# Make an executable that runs all the tests the the provided files
-
-add_executable(
-	AllTests
-	Tests/BindTests.cpp
-	Tests/MapTests.cpp
-	Tests/EitherTests.cpp
-	Tests/OptionTests.cpp
-	Tests/Examples.cpp
+target_include_directories(monad
+    INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib>
+        $<INSTALL_INTERFACE:include>
 )
 
-# Set the libaries to link to for the AllTests target
-target_link_libraries(AllTests PRIVATE GTest::gtest_main)
+# Optional unit tests
+option(BUILD_TESTING "Build libmonad tests" ON)
+
+if(BUILD_TESTING)
+    enable_testing()
+
+    find_package(GTest CONFIG REQUIRED)
+
+    add_executable(AllTests
+        Tests/BindTests.cpp
+        Tests/MapTests.cpp
+        Tests/EitherTests.cpp
+        Tests/OptionTests.cpp
+        Tests/Examples.cpp
+    )
+
+    target_link_libraries(AllTests PRIVATE
+        monad
+        GTest::gtest_main
+    )
+
+    include(GoogleTest)
+    gtest_discover_tests(AllTests)
+endif()
+

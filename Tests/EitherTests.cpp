@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "..\lib\Either.h"
+#include "../lib/Either.h"
 using namespace libmonad;
 
 namespace Tests
@@ -49,7 +49,7 @@ namespace Tests
 		constexpr auto errorMessage = "35";
 
 		// assign a right type value
-		Either<int, std::string> errorOrMessage = errorMessage;
+		Either<int, std::string> errorOrMessage = std::string(errorMessage);
 
 		// What to return if its actually a string, i.e a right type
 		const std::string result = errorOrMessage.When(
@@ -92,7 +92,7 @@ namespace Tests
 		constexpr auto errorMessage = "35";
 
 		// assign a right type value
-		Either<int, std::string> errorOrMessage = errorMessage;
+		Either<int, std::string> errorOrMessage = std::string(errorMessage);
 
 		// What to return if its actually a int, i.e a left type
 		const std::string result = errorOrMessage.WhenLeft(

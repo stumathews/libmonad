@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <stdexcept>
 
 namespace libmonad
 {	
@@ -149,7 +150,7 @@ namespace libmonad
 	template <typename L, typename R>
 	void Either<L, R>::CheckIfInitialized() const
 	{
-		if(isBottom) { throw std::exception("Either is not initialized. Assign it a value");}
+		if(isBottom) { throw std::runtime_error("Either is not initialized. Assign it a value");}
 	}
 
 	template <typename L, typename R>
@@ -190,7 +191,7 @@ namespace libmonad
 	template <typename L, typename R>
 	R Either<L, R>::ThrowIfLeft()
 	{
-		if (IsLeft()) throw std::exception("ThrowIfLeft");
+		if (IsLeft()) throw std::runtime_error("ThrowIfLeft");
 		return rightValue;
 	}
 

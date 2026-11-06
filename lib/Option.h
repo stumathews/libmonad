@@ -3,6 +3,7 @@
 #include <functional>
 
 #include "Either.h"
+#include <stdexcept>
 
 namespace libmonad
 {
@@ -54,8 +55,8 @@ namespace libmonad
 				value.Match([&](None none)
 				{
 					optionalMessage.Match(
-							[](None){ throw std::exception("ThrowIfNone"); },
-							[](const std::string& message){ throw std::exception(message.c_str()); }
+							[](None){ throw std::runtime_error("ThrowIfNone"); },
+							[](const std::string& message){ throw std::runtime_error(message.c_str()); }
 					);
 				}, [&](T some)
 				{
