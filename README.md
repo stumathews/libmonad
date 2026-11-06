@@ -1,6 +1,24 @@
 # libmonad
 C++ Monads header-only library for small projects
 
+## Build
+
+Build and install to a specific destination
+
+    cmake -S . -B build -DBUILD_TESTING=OFF
+    cmake --build build
+    cmake --install build --prefix /tmp/libmonad-install
+
+Run tests
+
+    cmake -S . -B build-tests -DBUILD_TESTING=ON
+    cmake --build build-tests
+    ctest --test-dir build-tests --output-on-failure
+
+Build and test example tests consumer of the library
+
+    cmake -S consumer -B consumer/build -DCMAKE_PREFIX_PATH=/tmp/libmonad-install
+
 Currently the following monads are supported:
 - Either<L,R>
 - Option<T>
